@@ -1,7 +1,14 @@
 <template>
   <div id="app">
-
-    <router-view/>
+    <div class='sidebar'>
+      stuff
+    </div>
+    <div class="map">
+    <v-map :zoom=13 :center="[42.38681,-72.52547]">
+      <v-tilelayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"></v-tilelayer>
+      <v-marker :lat-lng="[42.38681,-72.52547]"></v-marker>
+    </v-map>
+    </div>
   </div>
 </template>
 
@@ -10,14 +17,21 @@ export default {
   name: 'app'
 }
 </script>
-
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+* { box-sizing: border-box; }
+
+.sidebar {
+  position: absolute;
+  width: 35%;
+  height: 100%;
+  top: 0; left: 0;
+  overflow: hidden;
+  border-right: 3px solid rgba(0,0,0,0.2);
+}
+.map {
+  position: absolute;
+  left: 35%;
+  width: 65%;
+  top: 0; bottom: 0;
 }
 </style>

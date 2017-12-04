@@ -2,14 +2,15 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
-import router from './router'
-
-Vue.config.productionTip = false
-
+import Vue2Leaflet from 'vue2-leaflet'
+import 'leaflet/dist/leaflet.css'
 /* eslint-disable no-new */
+Vue.component('v-map', Vue2Leaflet.Map)
+Vue.component('v-tilelayer', Vue2Leaflet.TileLayer)
+Vue.component('v-marker', Vue2Leaflet.Marker)
+
 new Vue({
   el: '#app',
-  router,
   template: '<App/>',
   components: { App }
 })
