@@ -2,15 +2,16 @@
   <div id="app">
     <sidebar></sidebar>
     <mapcomp></mapcomp>
+
   </div>
 </template>
 
 <script>
 import Vue from 'vue'
-import SideBar from './components/SideBar'
 import MapComp from './components/MapComp'
-Vue.component('sidebar', SideBar)
+import SideBar from './components/SideBar'
 Vue.component('mapcomp', MapComp)
+Vue.component('sidebar', SideBar)
 
 export default {
   name: 'app',
