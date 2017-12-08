@@ -30,8 +30,8 @@ class Elena_backend:
 		actual_origin, actual_destination = self.find_actual_origin_and_destination()
 		route_by_length = self.compute_route(actual_origin, actual_destination, criteria = 'length')
 		route_by_impedance = self.compute_route(actual_origin, actual_destination, criteria = 'impedance')
-		# plot_route(graph, route_by_length)
-		# plot_route(graph, route_by_impedance)
+		#self.plot_route(route_by_length)
+		#self.plot_route(route_by_impedance)
 		self.shortest_path_route_stats = self.get_route_stats(route_by_length)
 		self.elevation_route_stats = self.get_route_stats(route_by_impedance)
 		self.combined_route_stats = {'shortest_path_route_stats' : self.shortest_path_route_stats,
@@ -53,7 +53,7 @@ class Elena_backend:
 
 	# TODO handle x% shortest distance property and experiment with penalty values
 	def calc_impedance(self, length, grade):
-		penalty = grade ** 2
+		penalty = grade #** 2
 		if(self.elevation_type == 'maximize'):
 			try:
 				penalty = 1.0/penalty
@@ -82,8 +82,8 @@ class Elena_backend:
 		route = nx.shortest_path(self.graph, origin, destination, weight=criteria)
 		return route
 
-	def plot_route(graph, route):
-		ox.plot_graph_route(graph, route)
+	def plot_route(self, route):
+		ox.plot_graph_route(self.graph, route)
 
 	def load_graph(self, filename):
 		return ox.load_graphml(filename=filename)
@@ -101,12 +101,12 @@ class Elena_backend:
 		return route_stats
 
 	def get_route_node_coords(self, route):
-		nodes = dict()
+		nodes = list()
 		for node in route:
 			node_coords = dict()
 			node_coords['lat'] = self.graph.node[node]['x'] # lat
 			node_coords['lon'] = self.graph.node[node]['y'] # lon
-			nodes[node] = node_coords
+			nodes.append(node_coords)
 		return nodes
 
 	def get_route_grade_stats(self, route):
