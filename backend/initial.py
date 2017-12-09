@@ -2,6 +2,8 @@ import osmnx as ox
 from key import google_key
 import sys
 
+ox.config(log_console=True, use_cache=True)
+
 def main(argv):
     location = argv[0]
     network_type = argv[1]
