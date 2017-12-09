@@ -23,11 +23,12 @@ class PriorityQueue:
     def get(self):
         return heapq.heappop(self.elements)[1]
 
-    def isContain(self, item, priority):
-        if (priority, item) in self.elements:
-            return True
-        else:
-            return False
+    def isContain(self, item):
+        for (cost, node) in self.elements :
+            if node == item:
+                return True
+
+        return False
 
     def display(self):
         print('priority queue',self.elements)
