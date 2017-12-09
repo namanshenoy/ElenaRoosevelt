@@ -17,6 +17,7 @@ class Elena_backend:
 	shortest_path_route_stats = dict()
 	elevation_route_stats = dict()
 	combined_route_stats = dict()
+	ox.config(log_console=True)#, use_cache=True) # for logging
 
 	def __init__(self, user_given_origin, user_given_destination, elevation_type, travel_mode):
 		self.user_given_origin = user_given_origin
@@ -30,8 +31,8 @@ class Elena_backend:
 		actual_origin, actual_destination = self.find_actual_origin_and_destination()
 		route_by_length = self.compute_route(actual_origin, actual_destination, criteria = 'length')
 		route_by_impedance = self.compute_route(actual_origin, actual_destination, criteria = 'impedance')
-		# plot_route(graph, route_by_length)
-		# plot_route(graph, route_by_impedance)
+		# self.plot_route(route_by_length)
+		# self.plot_route(route_by_impedance)
 		self.shortest_path_route_stats = self.get_route_stats(route_by_length)
 		self.elevation_route_stats = self.get_route_stats(route_by_impedance)
 		self.combined_route_stats = {'shortest_path_route_stats' : self.shortest_path_route_stats,
@@ -48,18 +49,21 @@ class Elena_backend:
 			length = float(data['length'])
 			grade = float(data['grade'])
 			grade_abs = float(data['grade_abs'])
-			data['impedance'] = self.calc_impedance(length, grade_abs)
+			data['impedance'] = self.calc_impedance(length, grade)
 			data['rise'] = length * grade
+
 
 	# TODO handle x% shortest distance property and experiment with penalty values
 	def calc_impedance(self, length, grade):
-		penalty = grade ** 2
+		if(self.elevation_type == 'minimize'):
+			penalty = abs(grade)
 		if(self.elevation_type == 'maximize'):
 			try:
-				penalty = 1.0/penalty
+				penalty = 1/abs(grade)
 			except:
 				penalty = 1
-		return length * penalty
+		return length*penalty
+
 
 	def find_actual_origin_and_destination(self):
 		origin_coord = self.get_coords_of_location(self.user_given_origin)
@@ -82,8 +86,8 @@ class Elena_backend:
 		route = nx.shortest_path(self.graph, origin, destination, weight=criteria)
 		return route
 
-	def plot_route(graph, route):
-		ox.plot_graph_route(graph, route)
+	def plot_route(self, route):
+		ox.plot_graph_route(self.graph, route)
 
 	def load_graph(self, filename):
 		return ox.load_graphml(filename=filename)
@@ -101,12 +105,12 @@ class Elena_backend:
 		return route_stats
 
 	def get_route_node_coords(self, route):
-		nodes = dict()
+		nodes = list()
 		for node in route:
 			node_coords = dict()
 			node_coords['lat'] = self.graph.node[node]['x'] # lat
 			node_coords['lon'] = self.graph.node[node]['y'] # lon
-			nodes[node] = node_coords
+			nodes.append(node_coords)
 		return nodes
 
 	def get_route_grade_stats(self, route):
@@ -141,7 +145,7 @@ class Elena_backend:
 
 		msg = 'Total elevation change is {:.0f} meters: a {:.0f} meter ascent and a {:.0f} meter descent'
 		print(msg.format(route['route_elevation_stats']['rises'], route['route_elevation_stats']['ascent'],
-		 					route['route_elevation_stats']['rises']))
+		 					route['route_elevation_stats']['descent']))
 
 		print('Total trip distance: {:,.0f} meters'.format(route['route_length']))
 		print('\n')
