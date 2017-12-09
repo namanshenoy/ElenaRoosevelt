@@ -33,6 +33,11 @@ class PriorityQueue:
     def display(self):
         print('priority queue',self.elements)
 
+    def peek(self):
+        priority, item = heapq.heappop(self.elements)
+        heapq.heappush(self.elements, (priority, item))
+        return (priority, item)
+
 #class searcgAstar:
 """
 This is A star search algorithm to find a path that maximizes or minimizes
