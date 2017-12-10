@@ -7,10 +7,12 @@
       </br>
         <input class ="input" id="autoInput" type="text" onfocus="this.placeholder=''" placeholder="TO">
         </div>
-      <button v-on:click="calcRoute" type="submit" class="button" id="submit">Find Route</button>
-      <button v-on:click="reset" type="submit" class="button" id="reset">Reset input</button>
-      </div>
+          <button v-on:click="reset" type="submit" class="button" id="reset">Reset input</button>
+          <button v-on:click="calcRoute" type="submit" class="button" id="submit">Find Route</button>
+        </div>
       <div id="datils">
+      </br>
+      <p class="output">lat:{{ lat }} lng: {{ lng }}</p>
       </div>
     </div>
     <div id="mapDisplay">
@@ -21,21 +23,16 @@
 
 <script>
 export default {
+
   data () {
     return {
       lat: 0.0,
       lng: 0.0,
-      map: null
+      map: null,
+      locations: [{lat: 0, lng: 0}],
+      markers: [],
+      currentLocation: ''
     }
-  },
-  mounted: function () {
-    this.map = new google.maps.Map(
-      document.getElementById('mapDisplay'),
-      this.options
-    )
-    this.getCurrentLocation().then(() => { this.initMap () }).catch((err) => { alert(err) })
-    this.createMarkers()
-    this.initAutocomplete()
   },
   methods: {
     createMarkers: function () {
@@ -47,7 +44,6 @@ export default {
       })
     },
     initAutocomplete: function () {
-      var self = this
       var autoInput = document.getElementById('autoInput')
       var autocomplete = new google.maps.places.Autocomplete(autoInput)
       autocomplete.addListener('place_changed', function () {
@@ -56,20 +52,20 @@ export default {
           window.alert("No details available for input: '" + place.name + "'")
           return
         } else {
-          if (self.currentLocation) {
-            self.currentLocation.setMap(null)
+          if (this.currentLocation) {
+            this.currentLocation.setMap(null)
           }
-          self.currentLocation = new google.maps.Marker({
+          this.currentLocation = new google.maps.Marker({
             position: place.geometry.location,
             id: 'currentLocation',
-            map: self.map
+            map: this.map
           })
         }
         if (place.geometry.viewport) {
-          self.map.fitBounds(place.geometry.viewport)
+          this.map.fitBounds(place.geometry.viewport)
         } else {
-          self.map.setCenter(place.geometry.location)
-          self.map.setZoom(7)
+          this.map.setCenter(place.geometry.location)
+          this.map.setZoom(7)
         }
       })
     },
@@ -82,9 +78,8 @@ export default {
             this.lat = position.coords.latitude
 
             let latLng = new google.maps.LatLng(this.lat, this.lng)
-            resolve(latLng) }.bind(this))
-        } else {
-          reject('Cannot use geolocation')
+            resolve(latLng)
+          }.bind(this))
         }
       })
     },
@@ -94,12 +89,22 @@ export default {
           lat: this.lat,
           lng: this.lng
         },
-         zoom: 15
-     })
-      }
+        zoom: 15
+      })
+    }
+  },
+  mounted: function () {
+    this.map = new google.maps.Map(
+      document.getElementById('mapDisplay')
+    )
+    this.getCurrentLocation().then(() => { this.initMap() }).catch((err) => { alert(err) })
+    this.createMarkers()
+    this.initAutocomplete()
   }
 }
 </script>
+
+
 <style lang="css">
 * {
   margin: 0;
@@ -173,4 +178,7 @@ export default {
 
 .button:focus {outline:0;}
 
+.output{
+  margin:10px;
+}
 </style>
