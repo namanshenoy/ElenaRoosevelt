@@ -29,6 +29,12 @@ class PriorityQueue:
                 return True
 
         return False
+    def check_priority(self, item):
+        for (cost, node) in self.elements :
+            if node == item:
+                return cost
+
+        return -1
 
     def display(self):
         print('priority queue',self.elements[:5])
@@ -42,9 +48,6 @@ class PriorityQueue:
 import osmnx as ox
 import osmnx as ox, networkx as nx, numpy as np
 ox.config(log_console=True, use_cache=True)
-
-
-
 city = ox.gdf_from_place('Amherst, MA')
 G = ox.graph_from_place('Amherst, MA', network_type='bike')
 google_elevation_api_key = 'AIzaSyDEOzFyx1050FqVa2fg-IhAdP6Bn8qq2Xw' #replace this with your own API key
@@ -52,6 +55,8 @@ google_elevation_api_key = 'AIzaSyDEOzFyx1050FqVa2fg-IhAdP6Bn8qq2Xw' #replace th
 # add elevation to each of the nodes, using the google elevation API, then calculate edge grades
 G = ox.add_node_elevations(G, api_key=google_elevation_api_key)
 G = ox.add_edge_grades(G)
+
+
 """
 This is A star search algorithm to find a path that maximizes or minimizes
 the elevation gain. The returned path has to be no longer than
@@ -129,10 +134,7 @@ def draw_bounding_box(origin_x, origin_y, destination_x, destination_y, graph):
 
     return origin, destination, bbox
 
-origin, destination,bbox = draw_bounding_box(42.38925740254655, -72.52251148223877, 42.38982001272744, 72.5282621383667, G)
 
-# project the street network to UTM
-G_proj = ox.project_graph(G)
 
 def heurisic_with_Eulicidian(origin_x, origin_y, destination_x, destination_y):
     h = math.sqrt((origin_x -  destination_x)**2 + (origin_y -  destination_y)**2)
@@ -141,6 +143,123 @@ def heurisic_with_Eulicidian(origin_x, origin_y, destination_x, destination_y):
 def heurisic_networkx(origin_x, origin_y, destination_x, destination_y):
     h = ((origin_x -  destination_x)**2 + (origin_y -  destination_y)**2) ** 0.5
     return h
+
+# define some edge impedance function here
+def impedance(length, grade):
+    penalty = grade ** 2
+    return length * penalty
+
+def has_edge(node1, node2, G):
+    for node in G.neighbors(node1):
+        if node == node2:
+            return True
+    return False
+'''
+Algorithm does not account for terrain or mainroad
+'''
+def find_shortest_path_gain(G, origin, destination):
+    print('origin', origin)
+    print('destination', destination)
+        #add origin to open_list
+    open_list.put(origin, 0)
+
+    past_cost = 0
+
+    while not open_list.empty():
+        print('close_list', close_list)
+            #At origin, find path with minimum elevation gain => find node with least f on the open list
+            #remove from the list
+        current_node = open_list.get()
+
+        print('Pop a node out of open list')
+        print('current_node', current_node)
+
+        open_list.display()
+        has_path = True
+      #  print('current node', current_node)
+       # print(current_node == destination)
+       # print('is empty', open_list.empty())
+      #  print(type(current_node))
+      #  print(type(destination))
+        if current_node == destination:
+            print(current_node == destination)
+            close_list.append(current_node)
+            return  close_list
+        #check if current_node connected to previous node:
+        if len(close_list) >=1:
+            check_current_node_validity = has_edge(current_node, close_list[-1],G)
+            print('has edge?', check_current_node_validity)
+        else:
+            check_current_node_validity = (current_node == origin)
+
+        if (current_node not in close_list) and check_current_node_validity:
+           # print(G.neighbors(current_node))
+            for next_node in G.neighbors(current_node):
+                print('next node', next_node)
+
+                #if neightbor contain destination, go to destination
+                if next_node == destination:
+                    close_list.append(current_node)
+                    close_list.append(next_node)
+                    return  close_list
+              #  print('next node', next_node)
+                if current_node == origin:
+                    G.node[current_node]['h_value'] = 0
+                h = G.node[next_node]['h_value']
+                elevation = G.get_edge_data(current_node,next_node).values()[0]['impedance']
+                edge_length = G.get_edge_data(current_node,next_node).values()[0]['length']
+
+                f = past_cost + edge_length +h
+                print('g',g)
+                print('h', h)
+                print('f',f)
+                print('in open list?', open_list.isContain(next_node))
+
+                if next_node not in close_list:
+
+
+                    if (not open_list.empty()):
+                        check_in_open_list = not open_list.isContain(next_node)
+                        check_priority = open_list.check_priority(next_node) > G.node[next_node]['cost']
+                        if  check_in_open_list or check_priority:
+                            open_list.put(next_node, f)
+
+                    else:
+                        open_list.put(next_node, f)
+
+                        print(open_list.peek()[0])
+
+                open_list.display()
+        #check if there are node to move to from next_node that is not current_node:
+
+
+        num_neighbor = 0
+
+        for value in nx.neighbors(G,current_node ):
+            num_neighbor +=1
+
+            print('neighbor name',value)
+            print('num neigbor',num_neighbor)
+
+        if (current_node == origin):
+            past_cost =
+        elif len(close_list) >=1:
+            if has_edge(current_node, close_list[-1],G):
+                past_cost += G.get_edge_data(current_node, close_list[-1]).values()[0]['length']
+                print(past_cost)
+                print('has edge?', has_edge(current_node, close_list[-1],G))
+                if (num_neighbor > 1):
+                    if current_node not in close_list:
+                        close_list.append(current_node)
+                        print('g to add',g)
+
+    print('finish')
+
+    return close_list
+
+origin, destination,bbox = draw_bounding_box(42.3911569, -72.5267121, 42.35056399999999, -72.5274, G)
+# project the street network to UTM
+G_proj = ox.project_graph(G)
 
 for edge in G_proj.edges.items():
     node1 = edge[0][0]
@@ -160,111 +279,11 @@ for node in G_proj.nodes:
         #calculate g(n) = f(n) + h(n) for all nodes
     G_proj.add_node(node,h_value=h)
 
-# define some edge impedance function here
-def impedance(length, grade):
-    penalty = grade ** 2
-    return length * penalty
-
 # add impedance and elevation rise values to each edge in the projected graph
 # use absolute value of grade in impedance function if you want to avoid uphill and downhill
 for u, v, k, data in G_proj.edges(keys=True, data=True):
     data['impedance'] = impedance(data['length'], data['grade_abs'])
     data['rise'] = data['length'] * data['grade']
-
-def has_edge(node1, node2, G):
-    for node in G.neighbors(node1):
-        if node == node2:
-            return True
-    return False
-'''
-Algorithm does not account for terrain or mainroad
-'''
-def find_shortest_path_gain(G, origin, destination):
-    print('origin', origin)
-    print('destination', destination)
-    travel_length = 0
-        #add origin to open_list
-    open_list.put(origin, 0)
-
-    while not open_list.empty():
-        print('close_list', close_list)
-            #At origin, find path with minimum elevation gain => find node with least f on the open list
-            #remove from the list
-        current_node = open_list.get()
-        print('Pop a node out of open list')
-        print('current_node', current_node)
-
-        open_list.display()
-        has_path = True
-      #  print('current node', current_node)
-       # print(current_node == destination)
-       # print('is empty', open_list.empty())
-      #  print(type(current_node))
-      #  print(type(destination))
-        if current_node == destination:
-            print(current_node == destination)
-            close_list.append(current_node)
-            return  close_list
-        #check if current_node connected to previous node:
-        if len(close_list) >=1:
-            check_current_node_validity = has_edge(current_node, close_list[-1],G)
-        else:
-            check_current_node_validity = (current_node == origin)
-
-        if (current_node not in close_list) and check_current_node_validity:
-           # print(G.neighbors(current_node))
-            for next_node in G.neighbors(current_node):
-                print('next node', next_node)
-
-                #if neightbor contain destination, go to destination
-                if next_node == destination:
-                    close_list.append(current_node)
-                    close_list.append(next_node)
-                    return  close_list
-              #  print('next node', next_node)
-
-                if next_node not in close_list:
-                    elevation = G.get_edge_data(current_node,next_node).values()[0]['impedance']
-                    g = G.get_edge_data(current_node,next_node).values()[0]['length']
-                    h = G.node[next_node]['h_value']
-                    f = g+h
-                    print('g',g)
-                    print('h', h)
-                    print('f',f)
-                    print('in open list?', open_list.isContain(next_node))
-
-                    if (not open_list.empty()):
-                        if (open_list.peek()[0]>= f) and (not open_list.isContain(next_node)):
-                            open_list.put(next_node, f)
-                    else:
-                        open_list.put(next_node, f)
-
-                        print(open_list.peek()[0])
-
-                open_list.display()
-        #check if there are node to move to from next_node that is not current_node:
-
-        num_neighbor = 0
-
-        for value in nx.neighbors(G,current_node ):
-            num_neighbor +=1
-
-            print('neighbor name',value)
-            print('num neigbor',num_neighbor)
-
-        if (current_node == origin):
-            close_list.append(current_node)
-        elif len(close_list) >=1:
-            if has_edge(current_node, close_list[-1],G):
-                print('has edge?', has_edge(current_node, close_list[-1],G))
-                if (num_neighbor > 1):
-                    if current_node not in close_list:
-                        close_list.append(current_node)
-                        print('g to add',g)
-
-    print('finish')
-
-    return close_list
 
 shortest_path = find_shortest_path_gain(G_proj, origin, destination)
 print('origin', origin)
