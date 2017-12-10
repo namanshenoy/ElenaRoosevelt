@@ -127,8 +127,8 @@ class Elena_backend:
 		nodes = list()
 		for node in route:
 			node_coords = dict()
-			node_coords['lat'] = self.graph.node[node]['x'] # lat
-			node_coords['lon'] = self.graph.node[node]['y'] # lon
+			node_coords['lat'] = self.graph.node[node]['y'] # lat
+			node_coords['lon'] = self.graph.node[node]['x'] # lon
 			nodes.append(node_coords)
 		return nodes
 
