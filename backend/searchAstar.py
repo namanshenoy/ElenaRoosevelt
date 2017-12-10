@@ -1,5 +1,5 @@
 import math
-
+import collections
 import heapq
 
 class Element:
@@ -292,7 +292,6 @@ print('shortest path', shortest_path, len(shortest_path))
 
 def length_of_path(path, G):
      distance = 0
-     print(range( len(path)-1, 1))
      for i in range( len(path)-1, 0,-1):
         # print('i', i)
         # print('distance', distance)
@@ -300,4 +299,17 @@ def length_of_path(path, G):
          i-=1
      return distance
 
+lat_long_dict = []
+def coordinate_of_path(path, G):
+    for i in range( len(path)-1, -1,-1):
+        new_dict = {}
+        new_dict['lat'] = G.node[path[i]]['x']
+        new_dict['long'] = G.node[path[i]]['y']
+        lat_long_dict.append(new_dict)
+    f = open("lat_long.txt","a")
+    f.write(str(lat_long_dict))
+    f.close()
+    return lat_long_dict
+
 print('shortest distance', length_of_path(shortest_path,G_proj ))
+print('lat, long', coordinate_of_path(shortest_path,G_proj ))
