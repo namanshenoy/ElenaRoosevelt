@@ -55,14 +55,33 @@ class Elena_backend:
 
 	# TODO handle x% shortest distance property and experiment with penalty values
 	def calc_impedance(self, length, grade):
-		if(self.elevation_type == 'minimize'):
-			penalty = abs(grade)
-		if(self.elevation_type == 'maximize'):
-			try:
-				penalty = 1/abs(grade)
-			except:
-				penalty = 1
-		return length*penalty
+		#only go uphill if it has sqrt(length)
+		if self.elevation_type == 'downhills':
+			if grade <= 0:
+				return length
+			return length**2
+		#only go dowhill if it has sqrt(length) problem is it goes too far sometimes
+		elif self.elevation_type == 'uphills':
+			if grade > 0:
+				return length
+			return length**2
+		#cruising route (within length)
+		elif self.elevation_type == 'minimize':
+			#this also makes grade an absolute value
+			penalty = grade**2
+			return length * penalty
+		#TODO this needs work.. suppose to maximize hills
+		elif self.elevation_type == 'maximize':
+			penalty = grade**2
+			return 1/(length*penalty)
+		#maximizes descent total
+		elif self.elevation_type == 'lowest_grade_total':
+			return (grade+1)
+		#maximizes ascent total
+		elif self.elevation_type == 'largest_grade_total':
+			return (grade*-1)+1
+
+
 
 
 	def find_actual_origin_and_destination(self):
@@ -115,13 +134,15 @@ class Elena_backend:
 
 	def get_route_grade_stats(self, route):
 		route_grades = dict()
-		grades = ox.get_route_edge_attributes(self.graph, route, 'grade_abs')
+		grades = ox.get_route_edge_attributes(self.graph, route, 'grade')
 		grades = [float(i) for i in grades]
 		grades_mean = np.mean(grades)*100
 		grades_max = np.max(grades)*100
+		grades_total = np.sum(grades)
 		route_grades['grades_list'] = grades
 		route_grades['grades_mean'] = grades_mean
 		route_grades['grades_max'] = grades_max
+		route_grades['grades_total'] = grades_total
 		return route_grades
 
 	def get_route_elevation_stats(self, route):
@@ -140,8 +161,8 @@ class Elena_backend:
 
 	def print_route_stats(self, route, criteria):
 		print("Route by %s stats" % criteria)
-		msg = 'The average grade is {:.1f}% and the max is {:.1f}%'
-		print(msg.format(route['route_grades_stats']['grades_mean'], route['route_grades_stats']['grades_max']))
+		msg = 'The average grade is {:.1f}% and the max is {:.1f}% and total sum is {:.1f}'
+		print(msg.format(route['route_grades_stats']['grades_mean'], route['route_grades_stats']['grades_max'], route['route_grades_stats']['grades_total']))
 
 		msg = 'Total elevation change is {:.0f} meters: a {:.0f} meter ascent and a {:.0f} meter descent'
 		print(msg.format(route['route_elevation_stats']['rises'], route['route_elevation_stats']['ascent'],
