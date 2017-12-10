@@ -3,12 +3,12 @@
     <div class="sidebar">
       <div id="context">
         <div class="inputs">
-        <input class ="input" id="autoInput" type="text" placeholder="FROM">
+        <input class ="input" id="autoInput" type="text" onfocus="this.placeholder=''" placeholder="FROM">
       </br>
-        <input class ="input" id="autoInput" type="text" placeholder="TO">
+        <input class ="input" id="autoInput" type="text" onfocus="this.placeholder=''" placeholder="TO">
         </div>
-        <button v-on:click="calcRoute" type="submit" class="button" id="submit">Find Route</button>
-        <button v-on:click="reset" type="submit" class="button" id="reset">Reset input</button>
+      <button v-on:click="calcRoute" type="submit" class="button" id="submit">Find Route</button>
+      <button v-on:click="reset" type="submit" class="button" id="reset">Reset input</button>
       </div>
       <div id="datils">
       </div>
@@ -27,6 +27,15 @@ export default {
       lng: 0.0,
       map: null
     }
+  },
+  mounted: function () {
+    this.map = new google.maps.Map(
+      document.getElementById('mapDisplay'),
+      this.options
+    )
+    this.getCurrentLocation().then(() => { this.initMap () }).catch((err) => { alert(err) })
+    this.createMarkers()
+    this.initAutocomplete()
   },
   methods: {
     createMarkers: function () {
@@ -88,15 +97,6 @@ export default {
          zoom: 15
      })
       }
-  },
-  mounted: function () {
-    this.map = new google.maps.Map(
-      document.getElementById('mapDisplay'),
-      this.options
-    )
-    this.getCurrentLocation().then(() => { this.initMap () }).catch((err) => { alert(err) })
-    this.createMarkers()
-    this.initAutocomplete()
   }
 }
 </script>
@@ -118,7 +118,7 @@ export default {
   position: absolute;
   display:flex;
   flex-flow:column;
-  width: 35%;
+  width: 25%;
   height: 100%;
   top: 0; left: 0;
   overflow: hidden;
@@ -126,8 +126,8 @@ export default {
 }
 #mapDisplay {
   position: absolute;
-  left: 35%;
-  width: 65%;
+  left: 25%;
+  width: 75%;
   top: 0; bottom: 0
 }
 .input {
@@ -135,27 +135,42 @@ export default {
   background-color: #fff;
   border: 1px solid #c4c4c4;
   height:30px;
-  width:222px;
+  width:75%;
   padding:0 10px;
-  }
-.button{
-  margin: 8px;
-  background-color: #7ca6ea;
-  border: 0px;
-  height:33px;
-  width:100px;
-  padding:0 10px;
-  color:#fff;
-  transition:1s;
-  }
+}
+.button {
+  cursor: pointer;
+  outline: none;
+  margin: 10px;
+  border: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  width: 35%;
+  height: 30px;
+  font-family: Helvetica;
+  color: white;
+  border-radius: 10px;
+  box-shadow: 0px 2px 7px grey;
+  transition: 100ms ease;
+}
+#submit.button{
+  border-bottom: 5px solid steelblue;
+  background: linear-gradient(#5FDDFF,#53ADDF);
+}
+#reset.button{
+  border-bottom: 5px solid #761282;
+  background: linear-gradient(#ad5197,#8e3160);
+}
+#submit.button:active{
+  color: #5FFFFF;
+  transform: translateY(4px);
+}
+#reset.button:active{
+  color: #e87cf4;
+  transform: translateY(4px);
+}
+
 .button:focus {outline:0;}
 
-#reset:hover{
-  background-color: #ea7c9e;
-  transition:1s;
-}
-#submit.button:hover{
-  background-color: #53af4d;
-  transition:1s;
-}
 </style>
