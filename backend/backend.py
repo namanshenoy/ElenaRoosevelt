@@ -161,7 +161,7 @@ class Elena_backend:
 
 	def print_route_stats(self, route, criteria):
 		print("Route by %s stats" % criteria)
-		msg = 'The average grade is {:.1f}% and the max is {:.1f}% and total sum is {:.1f}%'
+		msg = 'The average grade is {:.1f}% and the max is {:.1f}% and total sum is {:.1f}'
 		print(msg.format(route['route_grades_stats']['grades_mean'], route['route_grades_stats']['grades_max'], route['route_grades_stats']['grades_total']))
 
 		msg = 'Total elevation change is {:.0f} meters: a {:.0f} meter ascent and a {:.0f} meter descent'
