@@ -291,10 +291,12 @@ print('length', length )
 
 def length_of_path(path, G):
      distance = 0
-     for i in range(0, len(path)-2):
+     print(range( len(path)-1, 1))
+     for i in range( len(path)-1, 0,-1):
          print('i', i)
          print('distance', distance)
-         distance += G.get_edge_data(path[i],path[i+1]).values()[0]['length']
+         distance += G.get_edge_data(path[i],path[i-1]).values()[0]['length']
+         i-=1
      return distance
 
 print('shortest distance', length_of_path(shortest_path,G_proj ))
