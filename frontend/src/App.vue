@@ -1,20 +1,15 @@
 <template>
   <div id="app">
-    <mapcomp></mapcomp>
+    <app-map></app-map>
   </div>
 </template>
 
 <script>
-import Vue from 'vue'
-import MapComp from './components/MapComp'
-Vue.component('mapcomp', MapComp)
+import Map from './components/Map.vue'
 export default {
   name: 'app',
   components: {
-    MapComp
+    'app-map': Map
   }
 }
 </script>
-<style>
-* { box-sizing: border-box; }
-</style>
