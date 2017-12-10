@@ -78,7 +78,7 @@ class Elena_backend:
 		elif self.elevation_type == 'lowest_grade_total':
 			return (grade+1)
 		#maximizes ascent total
-		elif self.elevation_type = 'largest_grade_total':
+		elif self.elevation_type == 'largest_grade_total':
 			return (grade*-1)+1
 
 
