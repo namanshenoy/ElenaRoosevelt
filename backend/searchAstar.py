@@ -199,7 +199,7 @@ def find_shortest_path_gain(G, origin, destination):
                 path.append(G.node[current_node]['parent'])
                 current_node = G.node[current_node]['parent']
             print('finish')
-            return path, past_cost
+            return path
         #check if current_node connected to previous node:
 
       #  print('next node', next_node)
@@ -221,9 +221,10 @@ def find_shortest_path_gain(G, origin, destination):
                     continue
 
             h = G.node[next_node]['h_value']
-            elevation = G.get_edge_data(current_node,next_node).values()[0]['impedance']
+        #    elevation = G.get_edge_data(current_node,next_node).values()[0]['impedance']
             edge_length = G.get_edge_data(current_node,next_node).values()[0]['length']
-            f = past_cost + edge_length +h
+            f = G.node[current_node]['g_value'] + edge_length +h
+            G.node[next_node]['g_value'] = edge_length+ G.node[current_node]['g_value']
             print('past_cost', past_cost)
             print('edge_length', edge_length)
             print('h', h)
@@ -233,6 +234,7 @@ def find_shortest_path_gain(G, origin, destination):
                 if open_list.check_priority(next_node) > f:
                     open_list.replace(f, next_node)
                     G.node[next_node]['parent'] = current_node
+                    G.node[next_node]['g_value'] = edge_length+ G.node[current_node]['g_value']
 
             else:
 
@@ -274,7 +276,7 @@ for node in G_proj.nodes:
     destination_y = G_proj.node[destination]['y']
     h = heurisic_networkx(origin_x, origin_y, destination_x, destination_y)
         #calculate g(n) = f(n) + h(n) for all nodes
-    G_proj.add_node(node,h_value=h)
+    G_proj.add_node(node,h_value=h,g_value = 0)
     G_proj.add_node(node, parent = 0)
 
 # add impedance and elevation rise values to each edge in the projected graph
@@ -283,18 +285,17 @@ for u, v, k, data in G_proj.edges(keys=True, data=True):
     data['impedance'] = impedance(data['length'], data['grade_abs'])
     data['rise'] = data['length'] * data['grade']
 
-shortest_path , length= find_shortest_path_gain(G_proj, origin, destination)
+shortest_path= find_shortest_path_gain(G_proj, origin, destination)
 print('origin', origin)
 print('destination',destination)
 print('shortest path', shortest_path, len(shortest_path))
-print('length', length )
 
 def length_of_path(path, G):
      distance = 0
      print(range( len(path)-1, 1))
      for i in range( len(path)-1, 0,-1):
-         print('i', i)
-         print('distance', distance)
+        # print('i', i)
+        # print('distance', distance)
          distance += G.get_edge_data(path[i],path[i-1]).values()[0]['length']
          i-=1
      return distance
