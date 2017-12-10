@@ -21,7 +21,7 @@ class PriorityQueue:
         heapq.heappush(self.elements, (priority, item))
 
     def get(self):
-        return heapq.heappop(self.elements)[1]
+        return heapq.heappop(self.elements)
 
     def isContain(self, item):
         for (cost, node) in self.elements :
@@ -44,6 +44,14 @@ class PriorityQueue:
 
         heapq.heappush(self.elements, (priority, item))
         return (priority, item)
+
+    def replace(self, priority, item):
+        i=0
+        for (cost, node) in self.elements :
+            if node == item:
+                self.elements[i] = (priority, item)
+            i+=1
+
 
 import osmnx as ox
 import osmnx as ox, networkx as nx, numpy as np
@@ -74,6 +82,7 @@ travel_dis = 0
 open_list = PriorityQueue()
     #initialize closed list: is a record of all locations which have been explored and evaluated by the algorithm.
 close_list = []
+path = []
 '''Function takes in a graph, and destination node to calculate cost
    destination is a node
 '''
@@ -160,6 +169,7 @@ Algorithm does not account for terrain or mainroad
 def find_shortest_path_gain(G, origin, destination):
     print('origin', origin)
     print('destination', destination)
+    parent = None
         #add origin to open_list
     open_list.put(origin, 0)
 
@@ -169,13 +179,14 @@ def find_shortest_path_gain(G, origin, destination):
         print('close_list', close_list)
             #At origin, find path with minimum elevation gain => find node with least f on the open list
             #remove from the list
-        current_node = open_list.get()
+        top_node =  open_list.get()
+        current_node = top_node[1]
+        cost_for_node = top_node[0]
 
-        print('Pop a node out of open list')
+        print('POP A NODE OUT OF OPEN LIST: CURRENT NODE')
         print('current_node', current_node)
 
         open_list.display()
-        has_path = True
       #  print('current node', current_node)
        # print(current_node == destination)
        # print('is empty', open_list.empty())
@@ -183,81 +194,67 @@ def find_shortest_path_gain(G, origin, destination):
       #  print(type(destination))
         if current_node == destination:
             print(current_node == destination)
-            close_list.append(current_node)
-            return  close_list
+            path.append(current_node)
+            while G.node[current_node]['parent'] >0:
+                path.append(G.node[current_node]['parent'])
+                current_node = G.node[current_node]['parent']
+            print('finish')
+            return path, past_cost
         #check if current_node connected to previous node:
-        if len(close_list) >=1:
-            check_current_node_validity = has_edge(current_node, close_list[-1],G)
-            print('has edge?', check_current_node_validity)
-        else:
-            check_current_node_validity = (current_node == origin)
 
-        if (current_node not in close_list) and check_current_node_validity:
+      #  print('next node', next_node)
+        if current_node == origin:
+            G.node[current_node]['h_value'] = 0
+            past_cost += cost_for_node - G.node[current_node]['h_value']
            # print(G.neighbors(current_node))
-            for next_node in G.neighbors(current_node):
-                print('next node', next_node)
-
-                #if neightbor contain destination, go to destination
-                if next_node == destination:
-                    close_list.append(current_node)
-                    close_list.append(next_node)
-                    return  close_list
-              #  print('next node', next_node)
-                if current_node == origin:
-                    G.node[current_node]['h_value'] = 0
-                h = G.node[next_node]['h_value']
-                elevation = G.get_edge_data(current_node,next_node).values()[0]['impedance']
-                edge_length = G.get_edge_data(current_node,next_node).values()[0]['length']
-
-                f = past_cost + edge_length +h
-                print('g',g)
-                print('h', h)
-                print('f',f)
-                print('in open list?', open_list.isContain(next_node))
-
-                if next_node not in close_list:
+        for next_node in G.neighbors(current_node):
+            print('NEXT NODE', next_node)
 
 
-                    if (not open_list.empty()):
-                        check_in_open_list = not open_list.isContain(next_node)
-                        check_priority = open_list.check_priority(next_node) > G.node[next_node]['cost']
-                        if  check_in_open_list or check_priority:
-                            open_list.put(next_node, f)
+            if next_node in close_list:
+                continue
 
-                    else:
-                        open_list.put(next_node, f)
+            num_neighbor = 0
+            for neighbor in G.neighbors(next_node):
+                num_neighbor +=1
+                if (num_neighbor <=1) and (next_node != destination):
+                    continue
 
-                        print(open_list.peek()[0])
+            h = G.node[next_node]['h_value']
+            elevation = G.get_edge_data(current_node,next_node).values()[0]['impedance']
+            edge_length = G.get_edge_data(current_node,next_node).values()[0]['length']
+            f = past_cost + edge_length +h
+            print('past_cost', past_cost)
+            print('edge_length', edge_length)
+            print('h', h)
+            print('f',f)
 
-                open_list.display()
-        #check if there are node to move to from next_node that is not current_node:
+            if open_list.isContain(next_node):
+                if open_list.check_priority(next_node) > f:
+                    open_list.replace(f, next_node)
+                    G.node[next_node]['parent'] = current_node
+
+            else:
+
+                open_list.put(next_node, f)
+                G.node[next_node]['parent'] = current_node
+
+            open_list.display()
+    #check if there are node to move to from next_node that is not current_node:
 
 
-        num_neighbor = 0
 
-        for value in nx.neighbors(G,current_node ):
-            num_neighbor +=1
+        if current_node not in close_list:
+            close_list.append(current_node)
 
-            print('neighbor name',value)
-            print('num neigbor',num_neighbor)
 
-        if (current_node == origin):
-            past_cost =
-        elif len(close_list) >=1:
-            if has_edge(current_node, close_list[-1],G):
-                past_cost += G.get_edge_data(current_node, close_list[-1]).values()[0]['length']
-                print(past_cost)
-                print('has edge?', has_edge(current_node, close_list[-1],G))
-                if (num_neighbor > 1):
-                    if current_node not in close_list:
-                        close_list.append(current_node)
-                        print('g to add',g)
-
-    print('finish')
-
-    return close_list
-
-origin, destination,bbox = draw_bounding_box(42.3911569, -72.5267121, 42.35056399999999, -72.5274, G)
+    raise ValueError('No Path Found')
+'''
+Dubois - Franklin
+42.389813, -72.52825000000001, 42.3892436, -72.52251669999998
+Boulder - Umass
+'''
+origin, destination,bbox = draw_bounding_box(42.35056399999999, -72.5274, 42.3911569, -72.5267121, G)
 # project the street network to UTM
 G_proj = ox.project_graph(G)
 
@@ -278,6 +275,7 @@ for node in G_proj.nodes:
     h = heurisic_networkx(origin_x, origin_y, destination_x, destination_y)
         #calculate g(n) = f(n) + h(n) for all nodes
     G_proj.add_node(node,h_value=h)
+    G_proj.add_node(node, parent = 0)
 
 # add impedance and elevation rise values to each edge in the projected graph
 # use absolute value of grade in impedance function if you want to avoid uphill and downhill
@@ -285,18 +283,8 @@ for u, v, k, data in G_proj.edges(keys=True, data=True):
     data['impedance'] = impedance(data['length'], data['grade_abs'])
     data['rise'] = data['length'] * data['grade']
 
-shortest_path = find_shortest_path_gain(G_proj, origin, destination)
+shortest_path , length= find_shortest_path_gain(G_proj, origin, destination)
 print('origin', origin)
 print('destination',destination)
 print('shortest path', shortest_path, len(shortest_path))
-
-travel_length=0
-
-i=0
-for i in range(0,len(close_list)-1):
-    print[i]
-    print(close_list[i], close_list[i+1])
-    dis_bt_two_nodes = G_proj.get_edge_data(close_list[i],close_list[i+1]).values()[0]['length']
-    travel_length += dis_bt_two_nodes
-
-print('shortest path length',travel_length )
+print('length', length )
