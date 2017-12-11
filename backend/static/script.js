@@ -40,7 +40,7 @@ var map = new ol.Map({
 
 var data;
 $("#get_route").on("click",()=>{
-  console.log($SCRIPT_ROOT )
+  console.log($SCRIPT_ROOT)
 
 $.ajax({url: "/get_route/"+$("#origin_addr").val()+"/"+$("#destination_addr").val()+"/downhills/bike", success: function(result){
    	console.log(result.elevation_route_stats.route_node_coords)
