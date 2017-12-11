@@ -6,6 +6,16 @@ body,
   margin: 0;
 }
 
+.no-spacing{
+  margin: 0px;
+  padding: 0px;
+}
+
+#map-container{
+  width:100vw;
+  height: 30vh;
+}
+
 #map {
   position: absolute;
   z-index: 5;

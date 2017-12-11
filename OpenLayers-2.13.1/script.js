@@ -38,10 +38,38 @@ var map = new ol.Map({
   })
 });
 
+var data;
+$.ajax({url: "http://localhost:5000/", success: function(result){
+    data = JSON.parse(result)
+}});
 
-map.on('click', function(evt) {
-  console.log(evt.coordinate)
-  utils.getNearest(evt.coordinate).then(function(coord_street) {
+//map.on('click', function(evt) {
+  //console.log(evt.coordinate)
+  //long = data[0]['lon']
+  //lat = data[0]['lat']
+  //delete data[0]
+
+  //console.log("HEY")
+  //console.log(coord)
+var c = 0 //c is current node in the order of placement
+function pin_drop(){
+
+  if(c != 0){
+    console.log("DIST: " + getDistanceFromLatLonInKm(data[c]['lat'],data[c]['lon'],data[c-1]['lat'],data[c-1]['lon']))
+  }
+
+  var long = data[c]['lon']
+  var lat = data[c]['lat']
+
+  cproj = ol.proj.transform([long, lat], 'EPSG:4326','EPSG:3857')
+
+  map.getView().setCenter(cproj);
+  //map.getView().setZoom(5);
+
+  c = c+1
+
+  utils.getNearest(cproj).then(function(coord_street) {
+
     var last_point = points[points.length - 1];
     var points_length = points.push(coord_street);
 
@@ -68,7 +96,10 @@ map.on('click', function(evt) {
       utils.createRoute(json.routes[0].geometry);
     });
   });
-});
+}
+
+var features = []
+var pointFeatures = []
 
 var utils = {
   getNearest: function(coord) {
@@ -90,6 +121,7 @@ var utils = {
       geometry: new ol.geom.Point(ol.proj.fromLonLat(coord))
     });
     feature.setStyle(styles.icon);
+    pointFeatures.push(feature);
     vectorSource.addFeature(feature);
   },
   createRoute: function(polyline) {
@@ -105,6 +137,7 @@ var utils = {
       geometry: route
     });
     feature.setStyle(styles.route);
+    features.push(feature);
     vectorSource.addFeature(feature);
   },
   to4326: function(coord) {
@@ -113,3 +146,44 @@ var utils = {
     ], 'EPSG:3857', 'EPSG:4326');
   }
 };
+
+function clearRoute(){
+  vectorSource.clear()
+  c = 0
+  console.log(points)
+  points = []
+  features = []
+  pointFeatures = []
+}
+function goBack(){
+  vectorSource.removeFeature(features.slice(-1)[0])
+  vectorSource.removeFeature(pointFeatures.slice(-1)[0])
+  if (c != 0){
+    c = c - 1;
+    var long = data[c]['lon']
+    var lat = data[c]['lat']
+    cproj = ol.proj.transform([long, lat], 'EPSG:4326','EPSG:3857')
+    map.getView().setCenter(cproj);
+  }
+  pointFeatures.pop();
+  features.pop();
+  points.pop();
+}
+
+function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
+  var R = 6371; // Radius of the earth in km
+  var dLat = deg2rad(lat2-lat1);  // deg2rad below
+  var dLon = deg2rad(lon2-lon1);
+  var a =
+    Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+    Math.sin(dLon/2) * Math.sin(dLon/2)
+    ;
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  var d = R * c; // Distance in km
+  return d;
+}
+
+function deg2rad(deg) {
+  return deg * (Math.PI/180)
+}
