@@ -1,8 +1,12 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 from backend import Elena_backend
 
 app = Flask(__name__)
 elena_backend_object = Elena_backend()
+
+@app.route("/")
+def index():
+    return render_template("index.html")
 
 @app.route("/get_route/<origin>/<destination>/<elevation_type>/<travel_mode>", methods=['GET'])
 def get_data(origin, destination, elevation_type, travel_mode):

@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+
+<html>
+  <head>
+    <style src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.10.1/ol.min.css"></style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.10.1/ol.min.js"></script>
+    <script src="http://cdn.rawgit.com/stefanpenner/es6-promise/master/dist/es6-promise.min.js"></script>
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=fetch"></script>
+    <!--script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script-->
+    <style src="style.css"></style>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <div class="container-fluid no-spacing">
+      <div class="row no-spacing">
+        <div id="contain" class="col-md-10 no-spacing">
+          <div id="map-container">
+            <div id="map"></div>
+          </div>
+        </div>
+        <div class="col-md-2 no-spacing">
+          <div id="info-container">
+            <div id="msg">Click to add a point.</div>
+            <button onclick="pin_drop()">NEXT PIN</button>
+            <button onclick="clearRoute()">Clear</button>
+            <button onclick="goBack()">GO BACK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      document.getElementById("map-container").style.width="100%"
+      document.getElementById("map-container").style.height="100vh"
+      //document.getElementById("map-container").style.border="solid 1px red"
+      document.getElementById("info-container").style.width="100%"
+      document.getElementById("info-container").style.height="100vh"
+      //document.getElementById("info-container").style.border="solid 1px blue"
+    </script>
+    <script src="{{url_for('static', filename='script.js')}}"></script>
+
+  </body>
+</html>
