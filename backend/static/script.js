@@ -40,7 +40,9 @@ var map = new ol.Map({
 
 var data;
 $("#get_route").on("click",()=>{
-$.ajax({url: "http://35.227.65.115:7000/get_route/"+$("#origin_addr").val()+"/"+$("#destination_addr").val()+"/downhills/bike", success: function(result){
+  console.log($SCRIPT_ROOT )
+
+$.ajax({url: "/get_route/"+$("#origin_addr").val()+"/"+$("#destination_addr").val()+"/downhills/bike", success: function(result){
    	console.log(result.elevation_route_stats.route_node_coords)
 	data = result.elevation_route_stats.route_node_coords
 }});

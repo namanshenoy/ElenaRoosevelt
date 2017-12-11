@@ -16,6 +16,9 @@
 
   </head>
   <body>
+      <script type=text/javascript>
+        $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+      </script>
       <div class="row">
           <div class="blue col s12 m2 l2">
               <style>
