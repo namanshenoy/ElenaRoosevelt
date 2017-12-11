@@ -21,7 +21,8 @@ class Elena_backend:
 	ox.config(log_console=True)#, use_cache=True) # for logging, remove later
 
 	def __init__(self):
-		self.graph = self.load_graph('amherst_'+self.travel_mode+'.graphml')
+		#self.graph = self.load_graph('amherst_'+self.travel_mode+'.graphml')
+		self.graph = self.load_graph('pioneer_valley_'+self.travel_mode+'.graphml')
 
 	def execute(self, user_given_origin, user_given_destination, elevation_type, travel_mode):
 		self.user_given_origin = user_given_origin
@@ -116,10 +117,12 @@ class Elena_backend:
 	def get_route_stats(self, route):
 		route_stats = dict()
 		route_node_coords = self.get_route_node_coords(route)
+		route_node_elevations = self.get_route_node_elevations(route)
 		route_grades_stats = self.get_route_grade_stats(route)
 		route_elevation_stats = self.get_route_elevation_stats(route)
 		route_length = self.get_route_length(route)
 		route_stats['route_node_coords'] = route_node_coords
+		route_stats['route_elevations'] = route_node_elevations
 		route_stats['route_grades_stats'] = route_grades_stats
 		route_stats['route_elevation_stats'] = route_elevation_stats
 		route_stats['route_length'] = route_length
@@ -133,6 +136,12 @@ class Elena_backend:
 			node_coords['lon'] = self.graph.node[node]['x'] # lon
 			nodes.append(node_coords)
 		return nodes
+
+	def get_route_node_elevations(self, route):
+		node_elevations = list()
+		for node in route:
+			node_elevations.append(self.graph.node[node]['elevation'])
+		return node_elevations
 
 	def get_route_grade_stats(self, route):
 		route_grades = dict()
