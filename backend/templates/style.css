@@ -1,0 +1,46 @@
+html,
+body,
+#map {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+.no-spacing{
+  margin: 0px;
+  padding: 0px;
+}
+
+#map-container{
+  width:100vw;
+  height: 30vh;
+}
+
+#map {
+  position: absolute;
+  z-index: 5;
+}
+
+.popover-content {
+  min-width: 180px;
+}
+
+#msg {
+  position: absolute;
+  z-index: 10;
+  left: 50%;
+  transform: translate(-50%, 5px);
+  background-color: rgba(40, 40, 40, .8);
+  padding: 10px;
+  color: #eee;
+  width: 350px;
+  text-align: center;
+}
+
+.ol-control button {
+  background-color: rgba(40, 40, 40, 0.85) !important;
+}
+
+.ol-control button:hover {
+  background-color: rgba(40, 40, 40, 1) !important;
+}
