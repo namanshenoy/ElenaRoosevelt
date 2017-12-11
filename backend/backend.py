@@ -7,6 +7,7 @@ import sys
 import numpy as np
 import json
 
+
 class Elena_backend:
 	url = 'https://maps.googleapis.com/maps/api/geocode/json?address='
 	user_given_origin = "Brandywine Amherst MA"
@@ -17,16 +18,17 @@ class Elena_backend:
 	shortest_path_route_stats = dict()
 	elevation_route_stats = dict()
 	combined_route_stats = dict()
-	ox.config(log_console=True)#, use_cache=True) # for logging
+	ox.config(log_console=True)#, use_cache=True) # for logging, remove later
 
-	def __init__(self, user_given_origin, user_given_destination, elevation_type, travel_mode):
+	def __init__(self):
+		self.graph = self.load_graph('amherst_'+self.travel_mode+'.graphml')
+
+	def execute(self, user_given_origin, user_given_destination, elevation_type, travel_mode):
 		self.user_given_origin = user_given_origin
 		self.user_given_destination = user_given_destination
 		self.elevation_type = elevation_type
 		self.travel_mode = travel_mode
-		self.graph = self.load_graph('amherst_'+self.travel_mode+'.graphml')
 
-	def execute(self):
 		self.add_impedance_to_graph_edges()
 		actual_origin, actual_destination = self.find_actual_origin_and_destination()
 		route_by_length = self.compute_route(actual_origin, actual_destination, criteria = 'length')
@@ -38,9 +40,9 @@ class Elena_backend:
 		self.combined_route_stats = {'shortest_path_route_stats' : self.shortest_path_route_stats,
 									'elevation_route_stats' : self.elevation_route_stats}
 
-		self.print_route_stats(self.shortest_path_route_stats, criteria = 'length')
-		self.print_route_stats(self.elevation_route_stats, criteria = 'impedance')
-		self.send_data_to_frontend()
+		# self.print_route_stats(self.shortest_path_route_stats, criteria = 'length')
+		# self.print_route_stats(self.elevation_route_stats, criteria = 'impedance')
+		# self.send_data_to_frontend()
 
 	def add_impedance_to_graph_edges(self):
 	    # add impedance and elevation rise values to each edge in the projected graph
@@ -172,14 +174,16 @@ class Elena_backend:
 		print('\n')
 
 	def send_data_to_frontend(self):
-		print(json.dumps(self.combined_route_stats, indent=2))
+		# print(json.dumps(self.combined_route_stats, indent=2))
+		return self.combined_route_stats
 
 
-def main(argv):
-	elena_backend_object = Elena_backend(user_given_origin = argv[0], user_given_destination = argv[1],
-										elevation_type = argv[2], travel_mode = argv[3])
-	elena_backend_object.execute()
-
-
-if __name__ == "__main__":
-   main(sys.argv[1:])
+# Uncomment for command line testing
+# def main(argv):
+# 	elena_backend_object = Elena_backend(user_given_origin = argv[0], user_given_destination = argv[1],
+# 										elevation_type = argv[2], travel_mode = argv[3])
+# 	elena_backend_object.execute()
+#
+#
+# if __name__ == "__main__":
+#    main(sys.argv[1:])
