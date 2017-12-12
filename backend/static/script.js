@@ -2,7 +2,7 @@ var points = [],
   msg_el = document.getElementById('msg'),
   url_osrm_nearest = 'http://router.project-osrm.org/nearest/v1/bike/',
   url_osrm_route = 'http://router.project-osrm.org/route/v1/bike/',
-  icon_url = 'https://cdn.rawgit.com/openlayers/ol3/master/examples/data/icon.png',
+  icon_url = 'https://vasco.eu/sites/all/themes/vasco/includes/img/marker.png',
   vectorSource = new ol.source.Vector(),
   vectorLayer = new ol.layer.Vector({
     source: vectorSource
@@ -44,8 +44,10 @@ $("#get_route").on("click",()=>{
 $.ajax({url: "http://35.227.65.115:7000/get_route/"+$("#origin_addr").val()+"/"+$("#destination_addr").val()+"/"+$('input[name=radio]:checked').val()+"/bike", success: function(result){
   //console.log(result.elevation_route_stats.route_node_coords)
   data = result.elevation_route_stats.route_node_coords
-  document.getElementById("msg").innerHTML = "Route found"
+  document.getElementById("msg").innerHTML = "Route found! Click next pin"
   document.getElementById("chart_div").innerHTML = ""
+
+  stats = result.elevation_route_stats.route_grades_stats
 
   document.getElementById("go_back").disabled=true
   data_chart = result.elevation_route_stats.route_elevations_with_distances
@@ -179,7 +181,13 @@ function pin_drop(){
     }
 
     if (points_length > 1) {
-      msg_el.innerHTML = 'Continue ' + Math.round(getDistanceFromLatLonInKm(data[c-1]['lat'],data[c-1]['lon'],data[c-2]['lat'],data[c-2]['lon'])) + 'ft';
+      hill = "flat "
+      if(stats.grades_list[c-2] > 0){
+        hill = "uphill "
+      }else{
+        hill = "downhill "
+      }
+      msg_el.innerHTML = 'Continue ' + hill + Math.round(getDistanceFromLatLonInKm(data[c-1]['lat'],data[c-1]['lon'],data[c-2]['lat'],data[c-2]['lon'])) + 'ft';
     }
 
     if(points_length >= data.length){
