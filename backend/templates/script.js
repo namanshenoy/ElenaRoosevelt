@@ -156,6 +156,12 @@ $.ajax({url: "http://35.227.65.115:7000/get_route/"+$("#origin_addr").val()+"/"+
 var c = 0 //c is current node in the order of placement
 function pin_drop(){
 
+  if(points.length >= data.length){
+    console.log("YES")
+    msg_el.innerHTML = 'Route complete'
+    document.getElementById("next_pin").disabled = true
+  }
+
   if(c != 0){
     console.log("DIST: " + getDistanceFromLatLonInKm(data[c]['lat'],data[c]['lon'],data[c-1]['lat'],data[c-1]['lon']))
   }
@@ -187,13 +193,41 @@ function pin_drop(){
       }else{
         hill = "downhill "
       }
-      msg_el.innerHTML = 'Continue ' + hill + Math.round(getDistanceFromLatLonInKm(data[c-1]['lat'],data[c-1]['lon'],data[c-2]['lat'],data[c-2]['lon'])) + 'ft';
+      deg_bearing = bearings(data[c-1]['lat'],data[c-1]['lon'],data[c]['lat'],data[c]['lon'])
+      console.log(deg_bearing)
+      bearing = ''
+      if (deg_bearing > 0 && deg_bearing < 22.5){
+        bearing = 'North'
+      }
+      else if (deg_bearing > 337.5 && deg_bearing < 360){
+        bearing = 'North'
+      }
+      else if (deg_bearing > 22.5 && deg_bearing < 67.5){
+        bearing = 'North-East'
+      }
+      else if (deg_bearing > 67.5 && deg_bearing < 112.5){
+        bearing = 'East'
+      }
+      else if (deg_bearing > 112.5 && deg_bearing < 157.5){
+        bearing = 'South-East'
+      }
+      else if (deg_bearing > 157.5 && deg_bearing < 202.5){
+        bearing = 'South'
+      }
+      else if (deg_bearing > 202.5 && deg_bearing < 247.5){
+        bearing = 'South-West'
+      }
+      else if (deg_bearing > 247.5 && deg_bearing < 292.5){
+        bearing = 'West'
+      }
+      else if (deg_bearing > 292.5 && deg_bearing < 337.5){
+        bearing = 'North'
+      }
+
+      msg_el.innerHTML = 'Continue ' + hill + Math.round(getDistanceFromLatLonInKm(data[c-1]['lat'],data[c-1]['lon'],data[c-2]['lat'],data[c-2]['lon'])) + 'ft ' +bearing;
     }
 
-    if(points_length >= data.length){
-      msg_el.innerHTML = 'Route complete'
-      document.getElementById("next_pin").disabled = true
-    }
+
 
 
     //get the route
@@ -303,6 +337,14 @@ function forceLoad(){
   document.getElementById("page-load").style.display="none";
 }
 
+function bearings(lat1,lng1,lat2,lng2) {
+        var dLon = (lng2-lng1);
+        var y = Math.sin(dLon) * Math.cos(lat2);
+        var x = Math.cos(lat1)*Math.sin(lat2) - Math.sin(lat1)*Math.cos(lat2)*Math.cos(dLon);
+        var brng = rad2deg(Math.atan2(y, x));
+        return 360 - ((brng + 360) % 360);
+}
+
 function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
   var R = 6371; // Radius of the earth in km
   var dLat = deg2rad(lat2-lat1);  // deg2rad below
@@ -320,6 +362,11 @@ function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
 function deg2rad(deg) {
   return deg * (Math.PI/180)
 }
+
+function rad2deg(rad) {
+  return rad * 180 / Math.PI;
+}
+
 $(document).ready(function(){
        //Here is my logic now
        var input_origin = document.getElementById('origin_addr');
