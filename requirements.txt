@@ -16,6 +16,7 @@ entrypoints==0.2.3
 enum34==1.1.6
 Fiona==1.7.10.post1
 Flask==0.12.2
+Flask-Cors==3.0.3
 functools32==3.2.3.post2
 geopandas==0.3.0
 geopy==1.11.0
