@@ -38,10 +38,11 @@ body,
   text-align: center;
   vertical-align: middle;
   display: table-cell;
+
 }
 
 #page-load{
-  background: green;
+  background: #26a69a;
   position: absolute;
   width: 100vw;
   height: 100vh;
@@ -80,6 +81,8 @@ body,
   border-bottom:1px solid white;
   color:white;
 }
+
+/*
 .btn{
   border-bottom: 5px solid green;
   background: linear-gradient(lightgreen,green);
@@ -94,7 +97,7 @@ body,
 }
 
 .btn:focus {outline:0;}
-
+*/
 .output{
   margin:10px;
 }

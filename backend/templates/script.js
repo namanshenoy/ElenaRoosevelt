@@ -87,8 +87,11 @@ $.ajax({url: "http://35.227.65.115:7000/get_route/"+$("#origin_addr").val()+"/"+
         bottom: 50,
         left: 50
       };
-      const chartWidth = parseInt(d3.select('#chart_div').style('width'), 10);
+      //const chartWidth = parseInt(d3.select('#info-container').style('width'), 10);
       const chartHeight = 300;
+      //const chartHeight = 300;
+      const chartWidth = parseInt(d3.select('#contain').style('width'), 10);
+
       const width = chartWidth - chartMargins.right - chartMargins.left;
       const height = chartHeight - chartMargins.top - chartMargins.bottom;
       const svg = d3.select('#chart_div').append('svg')
@@ -110,6 +113,7 @@ $.ajax({url: "http://35.227.65.115:7000/get_route/"+$("#origin_addr").val()+"/"+
       g.append('path')
         .datum(data_chart)
         .attr('fill', 'steelblue')
+        .style("opacity", .4) 
         .attr('d', areaFn);
       /*g.append('g')
           .attr('transform', `translate(0, ${height})`)
