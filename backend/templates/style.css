@@ -49,10 +49,35 @@ body,
 }
 .btn{
   border-bottom: 5px solid green;
-  background: linear-gradient(lightgreen,green);
+  background: linear-gradient(#b1e0c9,green);
   margin:10px;
   width:90%;
   text-align:center;
+}
+#clear.btn{
+  border-bottom: 5px solid #e5445c;
+  background: linear-gradient(#f29fac,#e5445c);
+  margin:10px;
+  width:90%;
+  text-align:center;
+  border-radius: 6px;
+}
+
+#get_route.btn{
+  border-bottom: 5px solid #0b6bba;
+  background: linear-gradient(#8bbae0,#0b6bba);
+  margin:10px;
+  width:90%;
+  text-align:center;
+  border-radius: 6px;
+}
+
+#go_back.btn{
+  border-radius: 6px;
+}
+
+#next_pin.btn{
+  border-radius: 6px;
 }
 
 .btn:active{
