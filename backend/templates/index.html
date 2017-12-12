@@ -54,15 +54,34 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
     <script>
+      console.log("HI")
       document.getElementById("map-container").style.width="100%"
       document.getElementById("map-container").style.height="100vh"
       //document.getElementById("map-container").style.border="solid 1px red"
       document.getElementById("info-container").style.width="100%"
       document.getElementById("info-container").style.height="100vh"
+      var input = document.getElementById('origin_addr');
+      console.log(input)
+      var autocomplete = new google.maps.places.Autocomplete(input);
+
+      autocomplete.addListener('place_changed', function() {
+          infowindow.close();
+          marker.setVisible(false);
+          var place = autocomplete.getPlace();
+          console.log(place)
+          if (!place.geometry) {
+            // User entered the name of a Place that was not suggested and
+            // pressed the Enter key, or the Place Details request failed.
+            window.alert("No details available for input: '" + place.name + "'");
+            return;
+          }
+      })
       //document.getElementById("info-container").style.border="solid 1px blue"
     </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA68sNf90T9-yPLc2YlF34biBCcqIRvO-Q&libraries=places" async defer></script>
 
     <script src="{{url_for('static', filename='script.js')}}"></script>
+
     <script src="script.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
 

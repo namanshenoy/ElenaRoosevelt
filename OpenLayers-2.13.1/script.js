@@ -39,8 +39,9 @@ var map = new ol.Map({
 });
 
 var data;
-$.ajax({url: "http://localhost:5000/", success: function(result){
-    data = JSON.parse(result)
+$.ajax({url: "http://35.227.65.115:7000/get_route/Amherst,%20MA/Umass%20Amhert/downhills/bike", success: function(result){
+   	console.log(result.elevation_route_stats.route_node_coords)
+	data = result.elevation_route_stats.route_node_coords
 }});
 
 //map.on('click', function(evt) {

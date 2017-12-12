@@ -40,9 +40,7 @@ var map = new ol.Map({
 
 var data;
 $("#get_route").on("click",()=>{
-  console.log($SCRIPT_ROOT)
-
-$.ajax({url: "/get_route/"+$("#origin_addr").val()+"/"+$("#destination_addr").val()+"/downhills/bike", success: function(result){
+$.ajax({url: "http://35.227.65.115:7000/get_route/"+$("#origin_addr").val()+"/"+$("#destination_addr").val()+"/downhills/bike", success: function(result){
    	console.log(result.elevation_route_stats.route_node_coords)
 	data = result.elevation_route_stats.route_node_coords
 }});
@@ -93,10 +91,8 @@ function pin_drop(){
       return r.json();
     }).then(function(json) {
       if (json.code !== 'Ok') {
-        msg_el.innerHTML = 'No route found.';
         return;
       }
-      msg_el.innerHTML = 'Route added';
       //points.length = 0;
       utils.createRoute(json.routes[0].geometry);
     });
@@ -192,3 +188,38 @@ function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
 function deg2rad(deg) {
   return deg * (Math.PI/180)
 }
+$(document).ready(function(){
+       //Here is my logic now
+       var input_origin = document.getElementById('origin_addr');
+       var input_destination = document.getElementById('destination_addr');
+
+       var autocomplete_origin = new google.maps.places.Autocomplete(input_origin);
+       var autocomplete_destination = new google.maps.places.Autocomplete(input_destination);
+
+       autocomplete_origin.addListener('place_changed', function() {
+           infowindow.close();
+           marker.setVisible(false);
+           var place = autocomplete_origin.getPlace();
+           console.log(place)
+           if (!place.geometry) {
+             // User entered the name of a Place that was not suggested and
+             // pressed the Enter key, or the Place Details request failed.
+             window.alert("No details available for input: '" + place.name + "'");
+             return;
+           }
+       })
+
+       autocomplete_destination.addListener('place_changed', function() {
+           infowindow.close();
+           marker.setVisible(false);
+           var place = autocomplete_destination.getPlace();
+           console.log(place)
+           if (!place.geometry) {
+             // User entered the name of a Place that was not suggested and
+             // pressed the Enter key, or the Place Details request failed.
+             window.alert("No details available for input: '" + place.name + "'");
+             return;
+           }
+       })
+
+   });
