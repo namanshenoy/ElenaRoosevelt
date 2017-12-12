@@ -1,9 +1,11 @@
 from flask import Flask, jsonify, render_template
 from backend import Elena_backend
+import CORS from flask_cors
 
 app = Flask(__name__)
 elena_backend_object = Elena_backend()
 
+CORS(app)
 @app.route("/")
 def index():
     return render_template("index.html")
