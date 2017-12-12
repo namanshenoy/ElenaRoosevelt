@@ -45,8 +45,94 @@ $.ajax({url: "http://35.227.65.115:7000/get_route/"+$("#origin_addr").val()+"/"+
    	console.log(result.elevation_route_stats.route_node_coords)
 	data = result.elevation_route_stats.route_node_coords
   document.getElementById("msg").innerHTML = "Route found"
+  document.getElementById("chart_div").innerHTML = ""
+
   document.getElementById("go_back").disabled=true
+  data_chart = result.elevation_route_stats.route_elevations_with_distances
+  console.log("DATA CHART")
+  console.log(data_chart)
+  totalDistance = Math.round(data_chart[data_chart.length - 1].distance);
+     console.log("DATA")
+      let elevGain = data.reduce((acc, cur, idx, arr) => {
+        if (idx > 0 && (cur.elevation > arr[idx - 1].elevation)) {
+          acc += cur.elevation - arr[idx - 1].elevation;
+        }
+        return acc;
+      }, 0);
+      elevGain = Math.round(elevGain * 3.28084);
+      const chartMargins = {
+        top: 10,
+        right: 10,
+        bottom: 50,
+        left: 50
+      };
+      const chartWidth = parseInt(d3.select('#chart_div').style('width'), 10);
+      const chartHeight = 300;
+      const width = chartWidth - chartMargins.right - chartMargins.left;
+      const height = chartHeight - chartMargins.top - chartMargins.bottom;
+      const svg = d3.select('#chart_div').append('svg')
+        .attr('width', chartWidth)
+        .attr('height', chartHeight);
+      const g = svg.append('g')
+        .attr('transform', "translate(" + chartMargins.left + "," + chartMargins.top + ")");
+      const xScale = d3.scaleLinear()
+        .range([0, width])
+        .domain(d3.extent(data_chart, d => d.distance));
+      const yScale = d3.scaleLinear()
+        .range([height, 0])
+        .domain(d3.extent(data_chart, d => d.elevation));
+      const areaFn = d3.area()
+        .x(d => xScale(d.distance))
+        .y0(yScale(d3.min(data_chart, d => d.elevation)))
+        .y1(d => yScale(d.elevation))
+        .curve(d3.curveBasis);
+      g.append('path')
+        .datum(data_chart)
+        .attr('fill', 'steelblue')
+        .attr('d', areaFn);
+      /*g.append('g')
+          .attr('transform', `translate(0, ${height})`)
+          .call(d3.axisBottom(xScale))
+        .append('text')
+          .attr('fill', '#333')
+          .attr('y', 35)
+          .attr('x', width / 2)
+          .text('Distance in meters');*/
+      g.append('g')
+          .call(d3.axisLeft(yScale))
+        .append('text')
+          .attr('fill', '#333')
+          .attr('transform', 'rotate(-90)')
+          .attr('y', -35)
+          .attr('x', -height / 2)
+          .attr('text-anchor', 'end')
+          .text('Height, in meters');
+
+      // label for total distance
+    /*  g.append('g')
+        .append('text')
+          .classed('heading', true)
+          .attr('y', height + 35)
+          .attr('x', 0)
+          .attr('font-family', 'sans-serif')
+          .text('Total distance:')
+        .append('tspan')
+          .text(` ${totalDistance} m`);*/
+      // label for total elevation gain
+      /*g.append('g')
+        .append('text')
+          .classed('heading', true)
+          .attr('y', height + 35)
+          .attr('x', width)
+          .attr('font-family', 'sans-serif')
+          .attr('text-anchor', 'end')
+          .attr('startOffset', '100%')
+          .text('Elevation gain:')
+        .append('tspan')
+          .text(` ${elevGain.toLocaleString()} ft`);*/
 }});
+
+
 })
 
 //map.on('click', function(evt) {
@@ -247,5 +333,6 @@ $(document).ready(function(){
              return;
            }
        })
+
 
    });
