@@ -14,6 +14,7 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
   </head>
   <body>
@@ -45,7 +46,7 @@
                 <div class="row">
                     <div class="input-field col s12">
                       <input id="destination_addr"  type="text" onfocus="this.placeholder=''" placeholder="TO" class="validate">
-                      <label for="destination_addr" style="color:white">Destination Addresss</label>
+                      <label for="destination_addr" style="color:white">Destination Address</label>
                     </div>
                 </div>
 
@@ -60,11 +61,11 @@
 
                     <div class="radio">
                       <input id="radio-2" name="radio" value="downhills" type="radio">
-                      <label  for="radio-2" class="radio-label">Downhills</label>
+                      <label  for="radio-2" class="radio-label">Max Downhills</label>
                     </div>
                     <div class="radio">
                       <input id="radio-3" name="radio" value="uphills" type="radio">
-                      <label  for="radio-3" class="radio-label">Uphills</label>
+                      <label  for="radio-3" class="radio-label">Max Uphills</label>
                     </div>
                   </div>
                 </div>
@@ -74,9 +75,43 @@
                 <button class="waves-effect waves-light btn" id="next_pin" onclick="pin_drop()">NEXT PIN</button>
                 <button class="waves-effect waves-light btn" id="clear" onclick="clearRoute()">Clear</button>
                 <button class="waves-effect waves-light btn" id="go_back"  onclick="goBack()">GO BACK</button>
-              <div id="chart_div">
+
+              <!--stats-->
+              <div id="stats-container" class="row">
+                <table class="bordered" style="color:white;margin-right: 20px;">
+                  <thead>
+                    <tr >
+                      <th style="text-align:center !important" width="50%">
+                        Type
+                      </th>
+                      <th style="text-align:center !important" width="50%">
+                        Value
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style="text-align:center">
+                        <i class="small material-icons">trending_up</i> Ascent
+                      </td>
+                      <td style="text-align:center">
+                        <span id="up_stat"> 12334</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="text-align:center">
+                        <i class="small material-icons">trending_down</i> Descent
+                      </td>
+                      <td style="text-align:center">
+                        <span id="down_stat">1234</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
 
               </div>
+
+              <div id="chart_div"></div>
             </div>
           </div>
           <div id="contain" class=" col s12 m10 l10">
