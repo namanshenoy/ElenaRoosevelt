@@ -1,7 +1,7 @@
 var points = [],
   msg_el = document.getElementById('msg'),
-  url_osrm_nearest = 'http://router.project-osrm.org/nearest/v1/biking/',
-  url_osrm_route = 'http://router.project-osrm.org/route/v1/biking/',
+  url_osrm_nearest = 'http://router.project-osrm.org/nearest/v1/bike/',
+  url_osrm_route = 'http://router.project-osrm.org/route/v1/bike/',
   icon_url = 'https://cdn.rawgit.com/openlayers/ol3/master/examples/data/icon.png',
   vectorSource = new ol.source.Vector(),
   vectorLayer = new ol.layer.Vector({
@@ -40,9 +40,12 @@ var map = new ol.Map({
 
 var data;
 $("#get_route").on("click",()=>{
+  document.getElementById("msg").innerHTML = "Loading route.."
 $.ajax({url: "http://35.227.65.115:7000/get_route/"+$("#origin_addr").val()+"/"+$("#destination_addr").val()+"/downhills/bike", success: function(result){
    	console.log(result.elevation_route_stats.route_node_coords)
 	data = result.elevation_route_stats.route_node_coords
+  document.getElementById("msg").innerHTML = "Route found"
+  document.getElementById("go_back").disabled=true
 }});
 })
 
@@ -69,7 +72,6 @@ function pin_drop(){
   map.getView().setCenter(cproj);
   //map.getView().setZoom(5);
 
-  c = c+1
 
   utils.getNearest(cproj).then(function(coord_street) {
 
@@ -78,10 +80,19 @@ function pin_drop(){
 
     utils.createFeature(coord_street);
 
-    if (points_length < 2) {
-      msg_el.innerHTML = 'Click to add another point';
-      return;
+    if(points_length > 1 && document.getElementById("go_back").disabled == true){
+      document.getElementById("go_back").disabled=false;
     }
+
+    if (points_length > 1) {
+      msg_el.innerHTML = 'Continue ' + Math.round(getDistanceFromLatLonInKm(data[c-1]['lat'],data[c-1]['lon'],data[c-2]['lat'],data[c-2]['lon'])) + 'ft';
+    }
+
+    if(points_length >= data.length){
+      msg_el.innerHTML = 'Route complete'
+      document.getElementById("next_pin").disabled = true
+    }
+
 
     //get the route
     var point1 = last_point.join();
@@ -94,9 +105,11 @@ function pin_drop(){
         return;
       }
       //points.length = 0;
-      utils.createRoute(json.routes[0].geometry);
+      //utils.createRoute(json.routes[0].geometry);
+
     });
   });
+  c = c + 1;
 }
 
 var features = []
@@ -155,10 +168,20 @@ function clearRoute(){
   points = []
   features = []
   pointFeatures = []
+  if(document.getElementById("next_pin").disabled == true){
+    document.getElementById("next_pin").disabled = false
+  }
 }
 function goBack(){
+  if(features.length != 0){
   vectorSource.removeFeature(features.slice(-1)[0])
-  vectorSource.removeFeature(pointFeatures.slice(-1)[0])
+  }
+  if(pointFeatures.length != 0){
+    vectorSource.removeFeature(pointFeatures.slice(-1)[0])
+  }
+  if(document.getElementById("next_pin").disabled == true){
+    document.getElementById("next_pin").disabled = false
+  }
   if (c != 0){
     c = c - 1;
     var long = data[c]['lon']
@@ -169,6 +192,9 @@ function goBack(){
   pointFeatures.pop();
   features.pop();
   points.pop();
+  if(points.length == 1){
+    document.getElementById("go_back").disabled=true;
+  }
 }
 
 function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
@@ -182,7 +208,7 @@ function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
     ;
   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
   var d = R * c; // Distance in km
-  return d;
+  return d*3280.84; //now it's in feet
 }
 
 function deg2rad(deg) {
