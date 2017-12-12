@@ -3,9 +3,9 @@
     <div class="sidebar">
       <div id="context">
         <div class="inputs">
-        <input class ="input" id="autoInput" type="text" onfocus="this.placeholder=''" placeholder="FROM">
+        <input class ="input" id="autoInput1" type="text" onfocus="this.placeholder=''" placeholder="FROM">
       </br>
-        <input class ="input" id="autoInput" type="text" onfocus="this.placeholder=''" placeholder="TO">
+        <input class ="input" id="autoInput2" type="text" onfocus="this.placeholder=''" placeholder="TO">
         </div>
           <button v-on:click="reset" type="submit" class="button" id="reset">Reset input</button>
           <button v-on:click="calcRoute" type="submit" class="button" id="submit">Find Route</button>
@@ -23,7 +23,6 @@
 
 <script>
 export default {
-
   data () {
     return {
       lat: 0.0,
@@ -31,6 +30,7 @@ export default {
       map: null,
       locations: [{lat: 0, lng: 0}],
       markers: [],
+      route:'',
       currentLocation: ''
     }
   },
@@ -44,7 +44,7 @@ export default {
       })
     },
     initAutocomplete: function () {
-      var autoInput = document.getElementById('autoInput')
+      var autoInput = document.getElementById('autoInput1')
       var autocomplete = new google.maps.places.Autocomplete(autoInput)
       autocomplete.addListener('place_changed', function () {
         var place = autocomplete.getPlace()
@@ -66,6 +66,7 @@ export default {
         } else {
           this.map.setCenter(place.geometry.location)
           this.map.setZoom(7)
+          return false
         }
       })
     },

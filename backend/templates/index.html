@@ -16,14 +16,18 @@
 
   </head>
   <body>
+    <style>
+    body {
+      overflow-y: hidden;
+      overflow-x: hidden;
+    }
+    </style>
       <script type=text/javascript>
         $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
       </script>
       <div class="row">
           <div class="blue col s12 m2 l2">
-              <style>
 
-              </style>
             <div id="info-container">
                 <div class="row">
                     <div class="input-field col s12">
@@ -38,10 +42,9 @@
                     </div>
                 </div>
                   <button class="waves-effect waves-light btn" id="get_route" style="margin:10px;width:90%;text-align:center;">Get Route</button>
-
-                  <button class="waves-effect waves-light btn" style="margin:10px;width:90%;text-align:center;" onclick="pin_drop()">NEXT PIN</button>
-                  <button class="waves-effect waves-light btn" style="margin:10px;width:90%;text-align:center;" onclick="clearRoute()">Clear</button>
-                  <button class="waves-effect waves-light btn" style="margin:10px;width:90%;text-align:center;" onclick="goBack()">GO BACK</button>
+                  <button class="waves-effect waves-light btn" id="next_pin" style="margin:10px;width:90%;text-align:center;" onclick="pin_drop()">NEXT PIN</button>
+                  <button class="waves-effect waves-light btn" id="clear" style="margin:10px;width:90%;text-align:center;" onclick="clearRoute()">Clear</button>
+                  <button class="waves-effect waves-light btn" id="go_back" style="margin:10px;width:90%;text-align:center;" onclick="goBack()">GO BACK</button>
             </div>
           </div>
           <div id="contain" class=" col s12 m10 l10">
@@ -55,7 +58,7 @@
 
     <script>
       console.log("HI")
-      document.getElementById("map-container").style.width="100%"
+      document.getElementById("map-container").style.width="140%"
       document.getElementById("map-container").style.height="100vh"
       //document.getElementById("map-container").style.border="solid 1px red"
       document.getElementById("info-container").style.width="100%"
