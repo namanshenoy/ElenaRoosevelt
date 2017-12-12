@@ -143,7 +143,7 @@ class Elena_backend:
 		for i in range(0, len(route)):
 			node = route[i]
 			node_elevation_with_distance = dict()
-			node_elevation_with_distance['elevation'] = self.graph.node[node]['elevation']
+			node_elevation_with_distance['elevation'] = float(self.graph.node[node]['elevation'])
 			node_elevation_with_distance['distance'] = distances[i]
 			node_elevations_with_distances.append(node_elevation_with_distance)
 		return node_elevations_with_distances
