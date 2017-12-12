@@ -8,8 +8,7 @@
     <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=fetch"></script>
 
     <!--script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script-->
-    <style src="style.css"></style>
-
+    <link rel="stylesheet" type="text/css" href="style.css">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
@@ -17,10 +16,7 @@
   </head>
   <body>
     <style>
-    body {
-      overflow-y: hidden;
-      overflow-x: hidden;
-    }
+
     </style>
       <script type=text/javascript>
         $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
@@ -58,7 +54,7 @@
 
     <script>
       console.log("HI")
-      document.getElementById("map-container").style.width="140%"
+      document.getElementById("map-container").style.width="100%"
       document.getElementById("map-container").style.height="100vh"
       //document.getElementById("map-container").style.border="solid 1px red"
       document.getElementById("info-container").style.width="100%"

@@ -4,6 +4,8 @@ body,
   width: 100%;
   height: 100%;
   margin: 0;
+  position: relative;
+  z-index: 5;
 }
 
 .no-spacing{
@@ -16,10 +18,6 @@ body,
   height: 30vh;
 }
 
-#map {
-  position: absolute;
-  z-index: 5;
-}
 
 .popover-content {
   min-width: 180px;
@@ -37,10 +35,27 @@ body,
   text-align: center;
 }
 
-.ol-control button {
+.ol-control btn {
   background-color: rgba(40, 40, 40, 0.85) !important;
 }
 
-.ol-control button:hover {
+.ol-control btn:hover {
   background-color: rgba(40, 40, 40, 1) !important;
+}
+
+
+.btn{
+  border-bottom: 5px solid green;
+  background: linear-gradient(lightgreen,green);
+}
+
+.btn:active{
+  color: #5FFFFF;
+  transform: translateY(2px);
+}
+
+.btn:focus {outline:0;}
+
+.output{
+  margin:10px;
 }
