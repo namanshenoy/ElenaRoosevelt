@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, render_template
 from backend import Elena_backend
-import CORS from flask_cors
+from flask_cors import CORS
 
 app = Flask(__name__)
 elena_backend_object = Elena_backend()
