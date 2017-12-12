@@ -27,20 +27,20 @@
             <div id="info-container">
                 <div class="row">
                     <div class="input-field col s12">
-                      <input id="origin_addr" type="text"  placeholder="" style="border-bottom:1px solid white;color:white;" class="validate">
+                      <input id="origin_addr" type="text" onfocus="this.placeholder=''" placeholder="FROM" class="validate">
                       <label for="origin_addr" style="color:white">Origin Address</label>
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s12">
-                      <input id="destination_addr" placeholder="" style="border-bottom:1px solid white;color:white;" type="text" class="validate">
+                      <input id="destination_addr"  type="text" onfocus="this.placeholder=''" placeholder="TO" class="validate">
                       <label for="destination_addr" style="color:white">Destination Addresss</label>
                     </div>
                 </div>
-                  <button class="waves-effect waves-light btn" id="get_route" style="margin:10px;width:90%;text-align:center;">Get Route</button>
-                  <button class="waves-effect waves-light btn" id="next_pin" style="margin:10px;width:90%;text-align:center;" onclick="pin_drop()">NEXT PIN</button>
-                  <button class="waves-effect waves-light btn" id="clear" style="margin:10px;width:90%;text-align:center;" onclick="clearRoute()">Clear</button>
-                  <button class="waves-effect waves-light btn" id="go_back" style="margin:10px;width:90%;text-align:center;" onclick="goBack()">GO BACK</button>
+                  <button class="waves-effect waves-light btn" id="get_route" >Get Route</button>
+                  <button class="waves-effect waves-light btn" id="next_pin" onclick="pin_drop()">NEXT PIN</button>
+                  <button class="waves-effect waves-light btn" id="clear" onclick="clearRoute()">Clear</button>
+                  <button class="waves-effect waves-light btn" id="go_back"  onclick="goBack()">GO BACK</button>
             </div>
           </div>
           <div id="contain" class=" col s12 m10 l10">

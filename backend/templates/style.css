@@ -43,10 +43,16 @@ body,
   background-color: rgba(40, 40, 40, 1) !important;
 }
 
-
+.validate{
+  border-bottom:1px solid white;
+  color:white;
+}
 .btn{
   border-bottom: 5px solid green;
   background: linear-gradient(lightgreen,green);
+  margin:10px;
+  width:90%;
+  text-align:center;
 }
 
 .btn:active{
