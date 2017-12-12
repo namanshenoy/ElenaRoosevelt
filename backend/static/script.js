@@ -47,7 +47,18 @@ $.ajax({url: "http://35.227.65.115:7000/get_route/"+$("#origin_addr").val()+"/"+
   document.getElementById("msg").innerHTML = "Route found! Click next pin"
   document.getElementById("chart_div").innerHTML = ""
 
-  stats = result.elevation_route_stats.route_grades_stats
+  grade_stats = result.elevation_route_stats.route_grades_stats
+  elevation_stats = result.elevation_route_stats.route_elevation_stats
+  console.log(grade_stats)
+  console.log("ELEV STATS")
+  console.log(elevation_stats)
+
+  $('#ascent_stat').text(elevation_stats.ascent.toFixed(2) + " m")
+  $('#descent_stat').text(elevation_stats.descent.toFixed(2) + " m")
+  $('#grade_max_stat').text(grade_stats.grades_max.toFixed(2) + "%")
+  $('#grade_total_stat').text(grade_stats.grades_total.toFixed(2) + "%")
+  $('#grade_avg_stat').text(grade_stats.grades_mean.toFixed(2) + "%")
+
 
   document.getElementById("go_back").disabled=true
   data_chart = result.elevation_route_stats.route_elevations_with_distances
@@ -188,7 +199,7 @@ function pin_drop(){
 
     if (points_length > 1) {
       hill = "flat "
-      if(stats.grades_list[c-2] > 0){
+      if(grade_stats.grades_list[c-2] > 0){
         hill = "uphill "
       }else{
         hill = "downhill "

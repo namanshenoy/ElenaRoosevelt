@@ -53,6 +53,13 @@ $.ajax({url: "http://35.227.65.115:7000/get_route/"+$("#origin_addr").val()+"/"+
   console.log("ELEV STATS")
   console.log(elevation_stats)
 
+  $('#ascent_stat').text(elevation_stats.ascent.toFixed(2) + " m")
+  $('#descent_stat').text(elevation_stats.descent.toFixed(2) + " m")
+  $('#grade_max_stat').text(grade_stats.grades_max.toFixed(2) + "%")
+  $('#grade_total_stat').text(grade_stats.grades_total.toFixed(2) + "%")
+  $('#grade_avg_stat').text(grade_stats.grades_mean.toFixed(2) + "%")
+
+
   document.getElementById("go_back").disabled=true
   data_chart = result.elevation_route_stats.route_elevations_with_distances
   while(!data_chart){
