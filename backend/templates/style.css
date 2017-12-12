@@ -65,3 +65,7 @@ body,
 .output{
   margin:10px;
 }
+.radio-label{
+  color: white;
+  font-weight: 300;
+}

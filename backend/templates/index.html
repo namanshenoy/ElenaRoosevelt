@@ -16,7 +16,7 @@
   </head>
   <body>
     <style>
-
+      body{overflow-y: hidden;}
     </style>
       <script type=text/javascript>
         $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
@@ -25,6 +25,8 @@
           <div class="blue col s12 m2 l2">
 
             <div id="info-container">
+              <!-- INPUT FIELDS -->
+              <div class="input_fields">
                 <div class="row">
                     <div class="input-field col s12">
                       <input id="origin_addr" type="text" onfocus="this.placeholder=''" placeholder="FROM" class="validate">
@@ -37,10 +39,38 @@
                       <label for="destination_addr" style="color:white">Destination Addresss</label>
                     </div>
                 </div>
+              </div>
+
+              <!-- RADIO BOXES  -->
+              <div class="radio_box">
+                <div class="row">
+                  <div class="container">
+                    <div class="radio">
+                      <input id="radio-1" name="radio" type="radio" checked>
+                      <label for="radio-1" class="radio-label">Checked</label>
+                    </div>
+
+                    <div class="radio">
+                      <input id="radio-2" name="radio" type="radio">
+                      <label  for="radio-2" class="radio-label">Unchecked</label>
+                    </div>
+
+                    <div class="radio">
+                      <input id="radio-3" name="radio" type="radio">
+                      <label  for="radio-3" class="radio-label">Unchecked</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+                <!-- BUTTONS -->
+                <div class="button">
                   <button class="waves-effect waves-light btn" id="get_route" >Get Route</button>
                   <button class="waves-effect waves-light btn" id="next_pin" onclick="pin_drop()">NEXT PIN</button>
                   <button class="waves-effect waves-light btn" id="clear" onclick="clearRoute()">Clear</button>
                   <button class="waves-effect waves-light btn" id="go_back"  onclick="goBack()">GO BACK</button>
+                </div>
+
             </div>
           </div>
           <div id="contain" class=" col s12 m10 l10">
