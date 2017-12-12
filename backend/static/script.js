@@ -87,7 +87,8 @@ $.ajax({url: "http://35.227.65.115:7000/get_route/"+$("#origin_addr").val()+"/"+
         bottom: 50,
         left: 50
       };
-      const chartWidth = parseInt(d3.select('#chart_div').style('width'), 10);
+      //const chartWidth = parseInt(d3.select('#info-container').style('width'), 10);
+      const chartWidth = 300;
       const chartHeight = 300;
       const width = chartWidth - chartMargins.right - chartMargins.left;
       const height = chartHeight - chartMargins.top - chartMargins.bottom;
