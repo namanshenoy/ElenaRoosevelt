@@ -21,7 +21,7 @@ class Elena_backend:
 	ox.config(log_console=True)#, use_cache=True) # for logging, remove later
 
 	def __init__(self):
-		self.graph = self.load_graph('amherst_'+self.travel_mode+'.graphml')
+		self.graph = self.load_graph('pioneer_valley_'+self.travel_mode+'.graphml')
 		#self.graph = self.load_graph('pioneer_valley_'+self.travel_mode+'.graphml')
 
 	def execute(self, user_given_origin, user_given_destination, elevation_type, travel_mode):
