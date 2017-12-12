@@ -42,13 +42,21 @@ var data;
 $("#get_route").on("click",()=>{
   document.getElementById("msg").innerHTML = "Loading route.."
 $.ajax({url: "http://35.227.65.115:7000/get_route/"+$("#origin_addr").val()+"/"+$("#destination_addr").val()+"/"+$('input[name=radio]:checked').val()+"/bike", success: function(result){
-   	console.log(result.elevation_route_stats.route_node_coords)
-	data = result.elevation_route_stats.route_node_coords
+  //console.log(result.elevation_route_stats.route_node_coords)
+  data = result.elevation_route_stats.route_node_coords
   document.getElementById("msg").innerHTML = "Route found"
   document.getElementById("chart_div").innerHTML = ""
 
   document.getElementById("go_back").disabled=true
   data_chart = result.elevation_route_stats.route_elevations_with_distances
+  while(!data_chart){
+    console.log("DATA CHART")
+    console.log(data_chart)
+    $.ajax({url: "http://35.227.65.115:7000/get_route/"+$("#origin_addr").val()+"/"+$("#destination_addr").val()+"/"+$('input[name=radio]:checked').val()+"/bike", success: function(result){
+        console.log(result.elevation_route_stats.route_node_coords)
+        data_chart = result.elevation_route_stats.route_elevations_with_distances}
+      })
+    }
   console.log("DATA CHART")
   console.log(data_chart)
   totalDistance = Math.round(data_chart[data_chart.length - 1].distance);
@@ -284,7 +292,6 @@ function goBack(){
 }
 
 function forceLoad(){
-  console.log("CLICKED")
   document.getElementById("page-load").style.display="none";
 }
 
