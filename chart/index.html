@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <style>
+    body {
+      margin:0;
+      position:fixed;
+      top:0;right:0;bottom:0;left:0;
+      padding: 10px;
+      
+    }
+/*     svg { border: 1px solid aqua; } */
+    
+    text tspan {
+      font-weight: bold;
+    }
+
+    text.heading {
+      font-size: 0.7em;
+    }
+  </style>
+</head>
+
+<body>
+  <script src="data.js"></script>
+  <script>
+    totalDistance = Math.round(data[data.length - 1].distance);
+    
+    let elevGain = data.reduce((acc, cur, idx, arr) => {
+      if (idx > 0 && (cur.elevation > arr[idx - 1].elevation)) {
+        acc += cur.elevation - arr[idx - 1].elevation;
+      }
+      return acc;
+    }, 0);
+    elevGain = Math.round(elevGain * 3.28084);
+
+    const chartMargins = {
+      top: 10,
+      right: 10,
+      bottom: 50,
+      left: 50
+    };
+    const chartWidth = 860;
+    const chartHeight = 300;
+    const width = chartWidth - chartMargins.right - chartMargins.left;
+    const height = chartHeight - chartMargins.top - chartMargins.bottom;
+
+    const svg = d3.select('body').append('svg')
+      .attr('width', chartWidth)
+      .attr('height', chartHeight);
+
+    const g = svg.append('g')
+      .attr('transform', "translate(" + chartMargins.left + "," + chartMargins.top + ")");
+
+    const xScale = d3.scaleLinear()
+      .range([0, width])
+      .domain(d3.extent(data, d => d.distance));
+
+    const yScale = d3.scaleLinear()
+      .range([height, 0])
+      .domain(d3.extent(data, d => d.elevation));
+
+    const areaFn = d3.area()
+      .x(d => xScale(d.distance))
+      .y0(yScale(d3.min(data, d => d.elevation)))
+      .y1(d => yScale(d.elevation))
+      .curve(d3.curveBasis);
+
+    g.append('path')
+      .datum(data)
+      .attr('fill', 'steelblue')
+      .attr('d', areaFn);
+
+    g.append('g')
+        .attr('transform', `translate(0, ${height})`)
+        .call(d3.axisBottom(xScale))
+      .append('text')
+        .attr('fill', '#333')
+        .attr('y', 35)
+        .attr('x', width / 2)
+        .text('Distance in meters');
+
+    g.append('g')
+        .call(d3.axisLeft(yScale))
+      .append('text')
+        .attr('fill', '#333')
+        .attr('transform', 'rotate(-90)')
+        .attr('y', -35)
+        .attr('x', -height / 2)
+        .attr('text-anchor', 'end')
+        .text('Height, in meters');
+    
+    // label for total distance
+    g.append('g')
+      .append('text')
+        .classed('heading', true)
+        .attr('y', height + 35)
+        .attr('x', 0)
+        .attr('font-family', 'sans-serif')
+        .text('Total distance:')
+      .append('tspan')
+        .text(` ${totalDistance} m`);
+
+    // label for total elevation gain
+    g.append('g')
+      .append('text')
+        .classed('heading', true)
+        .attr('y', height + 35)
+        .attr('x', width)
+        .attr('font-family', 'sans-serif')
+        .attr('text-anchor', 'end')
+        .attr('startOffset', '100%')
+        .text('Elevation gain:')
+      .append('tspan')
+        .text(` ${elevGain.toLocaleString()} ft`);
+  </script>
+</body>

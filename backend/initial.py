@@ -7,9 +7,10 @@ ox.config(log_console=True, use_cache=True)
 def main(argv):
     location = argv[0]
     network_type = argv[1]
-    filename = 'amherst_' + str(network_type) + '.graphml'
+    filename = 'pioneer_valley_' + str(network_type) + '.graphml'
     # get graph from OSMaps
-    graph = ox.graph_from_place(location, network_type=network_type)
+    #graph = ox.graph_from_place(location, network_type=network_type)
+    graph = ox.graph_from_bbox(42.71, 41.98, -72.36, -72.88, network_type=network_type)
 
     # add elevation to each of the nodes, using the google elevation API, then calculate edge grades
     graph = ox.add_node_elevations(graph, api_key=google_key)
