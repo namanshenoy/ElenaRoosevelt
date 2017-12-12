@@ -1,0 +1,126 @@
+<!DOCTYPE HTML>
+
+<html>
+  <head>
+    <style src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.10.1/ol.min.css"></style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.10.1/ol.min.js"></script>
+    <script src="http://cdn.rawgit.com/stefanpenner/es6-promise/master/dist/es6-promise.min.js"></script>
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=fetch"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+
+    <!--script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script-->
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}" />
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+
+  </head>
+  <body>
+    <style>
+
+    </style>
+      <script type=text/javascript>
+        $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+      </script>
+      <div id="page-load" onclick="forceLoad()">
+        <p>ElenaRoosevelt</p>
+      </div>
+      <p id="msg">Enter a route to begin</p>
+      <div class="row">
+          <div class="blue col s12 m2 l2">
+
+            <div id="info-container">
+                <div id="main-title" class="row">
+                  <div class="input-field col s12">
+                    ElenaRoosevelt
+                  </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                      <input id="origin_addr" type="text" onfocus="this.placeholder=''" placeholder="FROM" class="validate">
+                      <label for="origin_addr" style="color:white">Origin Address</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                      <input id="destination_addr"  type="text" onfocus="this.placeholder=''" placeholder="TO" class="validate">
+                      <label for="destination_addr" style="color:white">Destination Addresss</label>
+                    </div>
+                </div>
+
+                <div class="radio_box">
+                <div class="row">
+                  <div class="container">
+
+                    <div class="radio">
+                      <input id="radio-1" value="minimize" name="radio" type="radio" checked="checked">
+                      <label  for="radio-1" class="radio-label">Minimal Grade</label>
+                    </div>
+
+                    <div class="radio">
+                      <input id="radio-2" name="radio" value="downhills" type="radio">
+                      <label  for="radio-2" class="radio-label">Downhills</label>
+                    </div>
+                    <div class="radio">
+                      <input id="radio-3" name="radio" value="uphills" type="radio">
+                      <label  for="radio-3" class="radio-label">Uphills</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+                <button class="waves-effect waves-light btn" id="get_route" >Get Route</button>
+                <button class="waves-effect waves-light btn" id="next_pin" onclick="pin_drop()">NEXT PIN</button>
+                <button class="waves-effect waves-light btn" id="clear" onclick="clearRoute()">Clear</button>
+                <button class="waves-effect waves-light btn" id="go_back"  onclick="goBack()">GO BACK</button>
+              <div id="chart_div">
+
+              </div>
+            </div>
+          </div>
+          <div id="contain" class=" col s12 m10 l10">
+            <div id="map-container">
+              <div id="map"></div>
+            </div>
+          </div>
+      </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
+    <script>
+      document.getElementById("page-load").classList.add("fade");
+
+      document.getElementById("map-container").style.width="100%"
+      document.getElementById("map-container").style.height="100vh"
+      //document.getElementById("map-container").style.border="solid 1px red"
+      document.getElementById("info-container").style.width="100%"
+      document.getElementById("info-container").style.height="100vh"
+      var input = document.getElementById('origin_addr');
+      console.log(input)
+      var autocomplete = new google.maps.places.Autocomplete(input);
+
+      autocomplete.addListener('place_changed', function() {
+          infowindow.close();
+          marker.setVisible(false);
+          var place = autocomplete.getPlace();
+          console.log(place)
+          if (!place.geometry) {
+            // User entered the name of a Place that was not suggested and
+            // pressed the Enter key, or the Place Details request failed.
+            window.alert("No details available for input: '" + place.name + "'");
+            return;
+          }
+      })
+      //document.getElementById("info-container").style.border="solid 1px blue"
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA68sNf90T9-yPLc2YlF34biBCcqIRvO-Q&libraries=places" async defer></script>
+
+    <script src="{{url_for('static', filename='script.js')}}"></script>
+
+    <script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+
+  </body>
+</html>

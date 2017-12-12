@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>EleNa Roosevelt</title>
+    </head>
+    <body>
+        <style>
+            html { height: 100% }
+            body { height: 100%; margin: 0px; padding: 0px }
+        </style>
+        <div id="map_canvas" style="float:left;width:70%;height:100%;"></div>
+        <div id="control_panel" style="float:right;width:30%;text-align:left;padding-top:20px">
+            <div id="directions_panel" style="margin:20px;background-color:#FFEE7"></div>
+        </div>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDM-RdHk7td9CeeNhf34v-bR6faI7P6bDQ&libraries=geometry,places&ext=.js"></script>
+
+    <script>
+        var directionDisplay;
+        var directionsService = new google.maps.DirectionsService();
+        var map;
+
+        function initialize() {
+        directionsDisplay = new google.maps.DirectionsRenderer();
+        var chicago = new google.maps.LatLng(41.850033, -87.6500523);
+        var myOptions = {
+          zoom: 6   ,
+          mapTypeId: google.maps.MapTypeId.ROADMAP,
+          center: chicago
+        }
+        map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+        directionsDisplay.setMap(map);
+        calcRoute();
+        }
+
+        function calcRoute() {
+        var route = [{
+           "lat": -72.5375345,
+           "lon": 42.4090306
+         },
+
+         {
+           "lat": -72.530844,
+           "lon": 42.40959
+         },
+
+         {
+           "lat": -72.5299739,
+           "lon": 42.40689
+         },
+
+         {
+           "lat": -72.529686,
+           "lon": 42.404986
+         },
+
+         {
+           "lat": -72.529264,
+           "lon": 42.403496
+         },
+
+         {
+           "lat": -72.528496,
+           "lon": 42.402328
+         },
+
+         {
+           "lat": -72.527906,
+           "lon": 42.400852
+         },
+
+         {
+           "lat": -72.5268128,
+           "lon": 42.4007401
+         },
+
+         {
+           "lat": -72.525103,
+           "lon": 42.400578
+         },
+
+         {
+           "lat": -72.526714,
+           "lon": 42.398876
+         },
+
+         {
+           "lat": -72.527578,
+           "lon": 42.398368
+         },
+
+         {
+           "lat": -72.52807,
+           "lon": 42.398044
+         },
+
+         {
+           "lat": -72.5274197,
+           "lon": 42.3973943
+         },
+
+         {
+           "lat": -72.5263751,
+           "lon": 42.3975911
+         },
+
+         {
+           "lat": -72.5254523,
+           "lon": 42.39758
+         },
+
+         {
+           "lat": -72.5255548,
+           "lon": 42.3967848
+         },
+
+         {
+           "lat": -72.5250186,
+           "lon": 42.3958069
+         },
+
+         {
+           "lat": -72.5264051,
+           "lon": 42.3953658
+         },
+
+         {
+           "lat": -72.5268485,
+           "lon": 42.3953515
+         },
+
+         {
+           "lat": -72.527111,
+           "lon": 42.3952655
+         },
+
+         {
+           "lat": -72.5270134,
+           "lon": 42.3950966
+         },
+         {
+           "lat": -72.526813,
+           "lon": 42.3948838
+         },
+         {
+           "lat": -72.5261693,
+           "lon": 42.3938026
+         },
+         {
+           "lat": -72.5256814,
+           "lon": 42.392777
+         },
+         {
+           "lat": -72.5256131,
+           "lon": 42.3925804
+         },
+         {
+           "lat": -72.5259201,
+           "lon": 42.3911651
+         }
+        ]
+
+        var route_waypoints = []
+        var i = 0
+        route.forEach((item)=>{
+            if (i%2 == 0 && i < 20){
+                route_waypoints.push({
+                    location:new google.maps.LatLng(item["lon"],item["lat"]),
+                    stopover : false
+                })
+            }
+            i++;
+        })
+
+        var request = {
+            origin: "brandywine, Amherst, MA",
+            destination: "UMass",
+            waypoints: route_waypoints,
+            optimizeWaypoints: true,
+            travelMode: google.maps.DirectionsTravelMode.BICYCLING
+        };
+        directionsService.route(request, function(response, status) {
+          if (status == google.maps.DirectionsStatus.OK) {
+            directionsDisplay.setDirections(response);
+            var route = response.routes[0];
+            var summaryPanel = document.getElementById("directions_panel");
+            summaryPanel.innerHTML = "";
+            // For each route, display summary information.
+            for (var i = 0; i < route.legs.length; i++) {
+              var routeSegment = i + 1;
+              summaryPanel.innerHTML += "<b>Route Segment: " + routeSegment + "</b><br />";
+              summaryPanel.innerHTML += route.legs[i].start_address + " to ";
+              summaryPanel.innerHTML += route.legs[i].end_address + "<br />";
+              summaryPanel.innerHTML += route.legs[i].distance.text + "<br /><br />";
+            }
+          } else {
+            alert("directions response "+status);
+          }
+        });
+        }
+
+        google.maps.event.addDomListener(window, "load", initialize);
+
+    </script>
+    </body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>OpenLayers Demo</title>
+    <style type="text/css">
+      html, body, #basicMap {
+          width: 100%;
+          height: 100%;
+          margin: 0;
+      }
+    </style>
+    <script src="OpenLayers.js"></script>
+    <script>
+      function init() {
+        map = new OpenLayers.Map("basicMap");
+        var mapnik         = new OpenLayers.Layer.OSM();
+        var fromProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
+        var toProjection   = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
+        var position       = new OpenLayers.LonLat(-72.5267, 42.3912).transform( fromProjection, toProjection);
+        var zoom           = 15; 
+
+        map.addLayer(mapnik);
+
+        var markers = new OpenLayers.Layer.Markers( "Markers" );
+	    map.addLayer(markers);
+	    markers.addMarker(new OpenLayers.Marker(position));
+
+	    var startPt=new OpenLayers.Geometry.Point(42.3912, -72.5267);
+		var endPt=new OpenLayers.Geometry.Point(43,-72);
+
+		//make the line:
+		var line=new OpenLayers.Geometry.LineString([startPt, endPt]);
+
+		//style
+		var style={strokeColor:"#0500bd", strokeWidth:3};
+		//make vector 
+		var fea=new OpenLayers.Feature.Vector(line, {}, style);
+
+		//make vectorLayer
+		var vec= new OpenLayers.Layer.Vector();
+
+		//add the feature
+		vec.addFeatures([fea]);
+
+		//add to map
+		map.addLayer(vec);
+
+        map.setCenter(position, zoom );
+      }
+    </script>
+  </head>
+  <body onload="init();">
+    <div id="basicMap"></div>
+  </body>
+</html>

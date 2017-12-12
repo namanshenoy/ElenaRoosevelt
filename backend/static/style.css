@@ -1,0 +1,100 @@
+html,
+body,
+#map {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  position: relative;
+  z-index: 5;
+  overflow-y: hidden;
+}
+
+.radio-label{
+  color: white;
+}
+
+.no-spacing{
+  margin: 0px;
+  padding: 0px;
+}
+
+#map-container{
+  width:100vw;
+  height: 30vh;
+}
+
+
+.popover-content {
+  min-width: 180px;
+}
+
+#main-title{
+  color: white;
+  font-size: 20px;
+}
+#page-load p{
+  font-size: 150px;
+  color: white;
+  text-align: center;
+  vertical-align: middle;
+  display: table-cell;
+}
+
+#page-load{
+  background: green;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  z-index: 50;
+  display: table;
+}
+
+#page-load.fade{
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 2s 4s, opacity 4s linear;
+  transition-delay: 1s;
+}
+
+#msg {
+  position: absolute;
+  z-index: 10;
+  left: 50%;
+  transform: translate(-50%, 5px);
+  background-color: rgba(40, 40, 40, .8);
+  padding: 10px;
+  color: #eee;
+  width: 350px;
+  text-align: center;
+}
+
+.ol-control btn {
+  background-color: rgba(40, 40, 40, 0.85) !important;
+}
+
+.ol-control btn:hover {
+  background-color: rgba(40, 40, 40, 1) !important;
+}
+
+.validate{
+  border-bottom:1px solid white;
+  color:white;
+}
+.btn{
+  border-bottom: 5px solid green;
+  background: linear-gradient(lightgreen,green);
+  margin:10px;
+  width:90%;
+  text-align:center;
+}
+
+.btn:active{
+  color: #5FFFFF;
+  transform: translateY(2px);
+}
+
+.btn:focus {outline:0;}
+
+.output{
+  margin:10px;
+}

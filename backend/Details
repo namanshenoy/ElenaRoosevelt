@@ -1,0 +1,25 @@
+Run server.py from command line:
+
+python server.py
+
+Run from postman/browser:
+
+http://localhost:5000/get_route/Brandywine%20Amherst%20MA/Colonial%20Village%20Apartments/downhills/bike
+
+Run backend.py from command line.
+
+python backend.py "Brandywine Amherst MA" "UMass Amherst" "minimize" "bike"
+python backend.py "Brandywine Amherst MA" "UMass Amherst" "minimize" "walk"
+
+initial.py is for saving the graphs.
+The graphs are already present in the data folder. So, no need to run this.
+
+python initial.py 'Amherst, Massachusetts' 'bike'
+python initial.py 'Amherst, Massachusetts' 'walk'
+
+A lot of stuff will be removed once we have the front-end ready.
+
+TODO:
+1. Fix the impedance function to account for distance.
+2. Error handling
+3. Flask server
