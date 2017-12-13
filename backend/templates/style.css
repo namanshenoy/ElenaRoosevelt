@@ -82,13 +82,29 @@ body,
   color:white;
 }
 
-/*
 .btn{
-  border-bottom: 5px solid green;
-  background: linear-gradient(lightgreen,green);
-  margin:10px;
-  width:90%;
+  background: linear-gradient(#b1e0c9,green);
+}
+#clear.btn{
+  border-bottom: solid #e5445c;
+  background: linear-gradient(#f29fac,#e5445c);
   text-align:center;
+  border-radius: 6px;
+}
+
+#get_route.btn{
+  border-bottom: #0b6bba;
+  background: linear-gradient(#8bbae0,#0b6bba);
+  text-align:center;
+  border-radius: 6px;
+}
+
+#go_back.btn{
+  border-radius: 6px;
+}
+
+#next_pin.btn{
+  border-radius: 6px;
 }
 
 .btn:active{
@@ -97,7 +113,3 @@ body,
 }
 
 .btn:focus {outline:0;}
-*/
-.output{
-  margin:10px;
-}
