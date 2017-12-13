@@ -39,6 +39,18 @@ var map = new ol.Map({
 });
 
 var data;
+//enter key listener to get route
+$("#origin_addr").keyup(function(event) {
+    if (event.keyCode === 13) {
+        $("#get_route").click();
+    }
+});
+$("#destination_addr").keyup(function(event) {
+    if (event.keyCode === 13) {
+        $("#get_route").click();
+    }
+});
+
 $("#get_route").on("click",()=>{
   document.getElementById("msg").innerHTML = "Loading route.."
 $.ajax({url: "http://35.227.65.115:7000/get_route/"+$("#origin_addr").val()+"/"+$("#destination_addr").val()+"/"+$('input[name=radio]:checked').val()+"/bike", success: function(result){
@@ -113,7 +125,7 @@ $.ajax({url: "http://35.227.65.115:7000/get_route/"+$("#origin_addr").val()+"/"+
       g.append('path')
         .datum(data_chart)
         .attr('fill', 'steelblue')
-        .style("opacity", .4) 
+        .style("opacity", .4)
         .attr('d', areaFn);
       /*g.append('g')
           .attr('transform', `translate(0, ${height})`)
