@@ -1,1 +1,1 @@
-web:  sh -c 'sudo apt-get install libspatialindex-dev package && cd ./backend/ && gunicorn wsgi ' --log-file=-
+web:  sh -c 'package && cd ./backend/ && gunicorn wsgi ' --log-file=-
