@@ -1,7 +1,7 @@
 import requests
 import osmnx as ox
 import networkx as nx
-from key import google_key
+from utils.key import google_key
 import numpy as np
 from utils.elevation import Elevation
 
