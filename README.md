@@ -55,6 +55,10 @@ FRONTEND FEATURES:
 * Navigate a map of the world (functions are currently within pioneer valley)
 
 
+BACKEND:
+* Dijkstra’s algorithm from Osmx allows us to keep track of cost of the move for the past nodes and the current move being considered. We manipulated the weight function taking in length (distance between two nodes) and grade (slopes between two node’s elevation) in order to minize the elevation within certain length. 
+
+* Astar search was implemented to reduce the cost of searching for the shortest past from O(E log(V)) to O(E).
 
 
 API FEATURES:
