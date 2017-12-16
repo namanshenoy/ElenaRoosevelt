@@ -1,1 +1,1 @@
-web:  sh -c 'cd ./backend/ && gunicorn wsgi ' --log-file=-
+web:  sh -c 'cd ./backend/ && gunicorn wsgi --timeout 60' --log-file=-
