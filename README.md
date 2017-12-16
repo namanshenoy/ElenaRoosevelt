@@ -9,7 +9,6 @@ Let's say you are hiking or biking from one location to another. You may want to
 Naman Shenoy, Corey Collins, Jaeseong Lee, Akash Mantry, Ly Harriet Bui
 ```
 ## Requirements to run
-## Requirements to run
 Requires at least Python 2.7.
 Setup:
 1. If you have virtualenv installed, set up a new virtual environment:
