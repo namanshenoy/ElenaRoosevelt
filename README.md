@@ -168,3 +168,10 @@ There are 3 current supported elevation types you can enter into this field. Eac
 
 ### Transportation Method:
 There is only 1 option currently supported for this, which is “bike”. The graph we have active in the backend is optimized for biking, and may easily be expanded in the future for other methods such as “walking” or “driving”. However the biking option works well with walking or running as well.
+
+
+### Testing:
+Run command from backend folder to test backend.
+```
+ python -m unittest discover -v
+```
