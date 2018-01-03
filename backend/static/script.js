@@ -41,7 +41,7 @@ var map = new ol.Map({
 var data;
 $("#get_route").on("click",()=>{
   document.getElementById("msg").innerHTML = "Loading route.."
-$.ajax({url: /get_route/"+$("#origin_addr").val()+"/"+$("#destination_addr").val()+"/"+$('input[name=radio]:checked').val()+"/bike", success: function(result){
+$.ajax({url: "/get_route/"+$("#origin_addr").val()+"/"+$("#destination_addr").val()+"/"+$('input[name=radio]:checked').val()+"/bike", success: function(result){
   //console.log(result.elevation_route_stats.route_node_coords)
   data = result.elevation_route_stats.route_node_coords
   document.getElementById("msg").innerHTML = "Route found! Click next pin"
