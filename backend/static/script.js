@@ -41,7 +41,7 @@ var map = new ol.Map({
 var data;
 $("#get_route").on("click",()=>{
   document.getElementById("msg").innerHTML = "Loading route.."
-$.ajax({url: "https://35.227.65.115:7000/get_route/"+$("#origin_addr").val()+"/"+$("#destination_addr").val()+"/"+$('input[name=radio]:checked').val()+"/bike", success: function(result){
+$.ajax({url: /get_route/"+$("#origin_addr").val()+"/"+$("#destination_addr").val()+"/"+$('input[name=radio]:checked').val()+"/bike", success: function(result){
   //console.log(result.elevation_route_stats.route_node_coords)
   data = result.elevation_route_stats.route_node_coords
   document.getElementById("msg").innerHTML = "Route found! Click next pin"
@@ -65,7 +65,7 @@ $.ajax({url: "https://35.227.65.115:7000/get_route/"+$("#origin_addr").val()+"/"
   while(!data_chart){
     console.log("DATA CHART")
     console.log(data_chart)
-    $.ajax({url: "http://35.227.65.115:7000/get_route/"+$("#origin_addr").val()+"/"+$("#destination_addr").val()+"/"+$('input[name=radio]:checked').val()+"/bike", success: function(result){
+    $.ajax({url: /get_route/"+$("#origin_addr").val()+"/"+$("#destination_addr").val()+"/"+$('input[name=radio]:checked').val()+"/bike", success: function(result){
         console.log(result.elevation_route_stats.route_node_coords)
         data_chart = result.elevation_route_stats.route_elevations_with_distances}
       })
