@@ -65,7 +65,7 @@ $.ajax({url: "/get_route/"+$("#origin_addr").val()+"/"+$("#destination_addr").va
   while(!data_chart){
     console.log("DATA CHART")
     console.log(data_chart)
-    $.ajax({url: /get_route/"+$("#origin_addr").val()+"/"+$("#destination_addr").val()+"/"+$('input[name=radio]:checked').val()+"/bike", success: function(result){
+    $.ajax({url: "/get_route/"+$("#origin_addr").val()+"/"+$("#destination_addr").val()+"/"+$('input[name=radio]:checked').val()+"/bike", success: function(result){
         console.log(result.elevation_route_stats.route_node_coords)
         data_chart = result.elevation_route_stats.route_elevations_with_distances}
       })
